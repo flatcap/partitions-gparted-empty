@@ -31,7 +31,7 @@ class Partition
 {
 public:
 	Partition();
-	Partition( const Glib::ustring & path );
+	Partition (const Glib::ustring & path);
 	~Partition();
 
 	void Reset();
@@ -46,36 +46,36 @@ public:
 			Sector sector_end,
 			Byte_Value sector_size,
 			bool inside_extended,
-			bool busy );
+			bool busy);
 
-	void Set_Unused( Sector sectors_unused );
-	void set_used( Sector sectors_used );
+	void Set_Unused (Sector sectors_unused);
+	void set_used (Sector sectors_used);
 
-	void Set_Unallocated( const Glib::ustring & device_path,
+	void Set_Unallocated (const Glib::ustring & device_path,
 			      Sector sector_start,
 			      Sector sector_end,
 			      Byte_Value sector_size,
-			      bool inside_extended );
+			      bool inside_extended);
 
 	//update partition number (used when a logical partition is deleted)
-	void Update_Number( int new_number );
+	void Update_Number (int new_number);
 
-	void add_path( const Glib::ustring & path, bool clear_paths = false );
-	void add_paths( const std::vector<Glib::ustring> & paths, bool clear_paths = false );
+	void add_path (const Glib::ustring & path, bool clear_paths = false);
+	void add_paths (const std::vector<Glib::ustring> & paths, bool clear_paths = false);
 	Byte_Value get_byte_length() const;
 	Sector get_sector_length() const;
 	Glib::ustring get_path() const;
 	std::vector<Glib::ustring> get_paths() const;
-	void add_mountpoint( const Glib::ustring & mountpoint, bool clear_mountpoints = false );
-	void add_mountpoints( const std::vector<Glib::ustring> & mountpoints, bool clear_mountpoints = false );
+	void add_mountpoint (const Glib::ustring & mountpoint, bool clear_mountpoints = false);
+	void add_mountpoints (const std::vector<Glib::ustring> & mountpoints, bool clear_mountpoints = false);
 	Glib::ustring get_mountpoint() const;
 	void clear_mountpoints();
 	std::vector<Glib::ustring> get_mountpoints() const;
 	Sector get_sector() const;
-	bool test_overlap( const Partition & partition ) const;
+	bool test_overlap (const Partition & partition) const;
 
-	bool operator==( const Partition & partition ) const;
-	bool operator!=( const Partition & partition ) const;
+	bool operator== (const Partition & partition) const;
+	bool operator!= (const Partition & partition) const;
 
 	//some public members
 	Glib::ustring device_path;
@@ -106,7 +106,7 @@ public:
 private:
 	void sort_paths_and_remove_duplicates();
 
-	static bool compare_paths( const Glib::ustring & A, const Glib::ustring & B );
+	static bool compare_paths (const Glib::ustring & A, const Glib::ustring & B);
 
 	std::vector<Glib::ustring> paths;
 	std::vector<Glib::ustring> mountpoints;

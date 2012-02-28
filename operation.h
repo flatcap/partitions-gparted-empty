@@ -26,7 +26,7 @@ public:
 	Operation();
 	virtual ~Operation() {}
 
-	virtual void apply_to_visual( std::vector<Partition> & partitions ) = 0;
+	virtual void apply_to_visual (std::vector<Partition> & partitions) = 0;
 	virtual void create_description() = 0;
 
 	//public variables
@@ -41,9 +41,9 @@ public:
 	OperationDetail operation_detail;
 
 protected:
-	int find_index_original( const std::vector<Partition> & partitions );
-	int find_index_extended( const std::vector<Partition> & partitions );
-	void insert_unallocated( std::vector<Partition> & partitions, Sector start, Sector end, Byte_Value sector_size, bool inside_extended );
+	int find_index_original (const std::vector<Partition> & partitions);
+	int find_index_extended (const std::vector<Partition> & partitions);
+	void insert_unallocated (std::vector<Partition> & partitions, Sector start, Sector end, Byte_Value sector_size, bool inside_extended);
 
 	int index;
 	int index_extended;

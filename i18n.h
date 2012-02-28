@@ -353,7 +353,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10);
+     .arg(o10);
     return c.str();
   }
 
@@ -368,7 +368,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10).arg(o11);
+     .arg(o10).arg(o11);
     return c.str();
   }
 
@@ -383,7 +383,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10).arg(o11).arg(o12);
+     .arg(o10).arg(o11).arg(o12);
     return c.str();
   }
 
@@ -399,7 +399,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10).arg(o11).arg(o12).arg(o13);
+     .arg(o10).arg(o11).arg(o12).arg(o13);
     return c.str();
   }
 
@@ -415,7 +415,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10).arg(o11).arg(o12).arg(o13).arg(o14);
+     .arg(o10).arg(o11).arg(o12).arg(o13).arg(o14);
     return c.str();
   }
 
@@ -432,7 +432,7 @@ namespace String
   {
     UStringPrivate::Composition c(fmt);
     c.arg(o1).arg(o2).arg(o3).arg(o4).arg(o5).arg(o6).arg(o7).arg(o8).arg(o9)
-      .arg(o10).arg(o11).arg(o12).arg(o13).arg(o14).arg(o15);
+     .arg(o10).arg(o11).arg(o12).arg(o13).arg(o14).arg(o15);
     return c.str();
   }
 }

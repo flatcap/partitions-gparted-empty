@@ -70,8 +70,8 @@ enum SIZE_UNIT
 enum CUSTOM_TEXT
 {
 	CTEXT_NONE,
-	CTEXT_ACTIVATE_FILESYSTEM,		// Activate text ('Mount', 'Swapon', ...)
-	CTEXT_DEACTIVATE_FILESYSTEM,		// Deactivate text ('Unmount', 'Swapoff', ...)
+	CTEXT_ACTIVATE_FILESYSTEM,		// Activate text ('Mount', 'Swapon',...)
+	CTEXT_DEACTIVATE_FILESYSTEM,		// Deactivate text ('Unmount', 'Swapoff',...)
 	CTEXT_CHANGE_UUID_WARNING,		// Warning to print when changing UUIDs
 };
 
@@ -111,50 +111,50 @@ struct FS
 class Utils
 {
 public:
-	static Sector round( double double_value );
-	static Gtk::Label * mk_label( const Glib::ustring & text,
+	static Sector round (double double_value);
+	static Gtk::Label * mk_label (const Glib::ustring & text,
 				      bool use_markup = true,
 				      Gtk::AlignmentEnum x_align = Gtk::ALIGN_LEFT,
 				      Gtk::AlignmentEnum y_align = Gtk::ALIGN_CENTER,
 				      bool wrap = false,
 				      bool selectable = false,
-				      const Glib::ustring & text_color = "black" );
-	static Glib::ustring num_to_str( Sector number );
-	static Glib::ustring get_color( FILESYSTEM filesystem );
-	static Glib::RefPtr<Gdk::Pixbuf> get_color_as_pixbuf( FILESYSTEM filesystem, int width, int height );
-	static Glib::ustring get_filesystem_string( FILESYSTEM filesystem );
-	static Glib::ustring get_filesystem_software( FILESYSTEM filesystem );
-	static bool kernel_supports_fs( const Glib::ustring & fs );
-	static bool kernel_version_at_least( int major_ver, int minor_ver, int patch_ver );
-	static Glib::ustring format_size( Sector sectors, Byte_Value sector_size );
-	static Glib::ustring format_time( std::time_t seconds );
-	static double sector_to_unit( Sector sectors, Byte_Value sector_size, SIZE_UNIT size_unit );
-	static int execute_command( const Glib::ustring & command );
-	static int execute_command( const Glib::ustring & command,
+				      const Glib::ustring & text_color = "black");
+	static Glib::ustring num_to_str (Sector number);
+	static Glib::ustring get_color (FILESYSTEM filesystem);
+	static Glib::RefPtr<Gdk::Pixbuf> get_color_as_pixbuf (FILESYSTEM filesystem, int width, int height);
+	static Glib::ustring get_filesystem_string (FILESYSTEM filesystem);
+	static Glib::ustring get_filesystem_software (FILESYSTEM filesystem);
+	static bool kernel_supports_fs (const Glib::ustring & fs);
+	static bool kernel_version_at_least (int major_ver, int minor_ver, int patch_ver);
+	static Glib::ustring format_size (Sector sectors, Byte_Value sector_size);
+	static Glib::ustring format_time (std::time_t seconds);
+	static double sector_to_unit (Sector sectors, Byte_Value sector_size, SIZE_UNIT size_unit);
+	static int execute_command (const Glib::ustring & command);
+	static int execute_command (const Glib::ustring & command,
 				    Glib::ustring & output,
 				    Glib::ustring & error,
-				    bool use_C_locale = false );
-	static Glib::ustring regexp_label( const Glib::ustring & text
+				    bool use_C_locale = false);
+	static Glib::ustring regexp_label (const Glib::ustring & text
 	                                 , const Glib::ustring & pattern
-	                                 );
-	static Glib::ustring fat_compliant_label( const Glib::ustring & label );
-	static Glib::ustring create_mtoolsrc_file( char file_name[],
-                    const char drive_letter, const Glib::ustring & device_path );
-	static Glib::ustring delete_mtoolsrc_file( const char file_name[] );
-	static Glib::ustring trim( const Glib::ustring & src, const Glib::ustring & c = " \t\r\n" );
-	static Glib::ustring cleanup_cursor( const Glib::ustring & text );
+	                                );
+	static Glib::ustring fat_compliant_label (const Glib::ustring & label);
+	static Glib::ustring create_mtoolsrc_file (char file_name[],
+                    const char drive_letter, const Glib::ustring & device_path);
+	static Glib::ustring delete_mtoolsrc_file (const char file_name[]);
+	static Glib::ustring trim (const Glib::ustring & src, const Glib::ustring & c = " \t\r\n");
+	static Glib::ustring cleanup_cursor (const Glib::ustring & text);
 	static Glib::ustring get_lang();
-	static void tokenize( const Glib::ustring& str,
+	static void tokenize (const Glib::ustring& str,
 	                      std::vector<Glib::ustring>& tokens,
-	                      const Glib::ustring& delimiters );
-	static void split( const Glib::ustring& str,
+	                      const Glib::ustring& delimiters);
+	static void split (const Glib::ustring& str,
 	                   std::vector<Glib::ustring>& result,
-	                   const Glib::ustring& delimiters     );
+	                   const Glib::ustring& delimiters    );
 	static int convert_to_int(const Glib::ustring & src);
 	static Glib::ustring generate_uuid(void);
 
 private:
-	static bool get_kernel_version( int & major_ver, int & minor_ver, int & patch_ver );
+	static bool get_kernel_version (int & major_ver, int & minor_ver, int & patch_ver);
 };
 
 #endif //UTILS

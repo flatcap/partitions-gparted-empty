@@ -16,8 +16,8 @@ class TreeView_Detail : public Gtk::TreeView
 {
 public:
 	TreeView_Detail();
-	void load_partitions( const std::vector<Partition> & partitions );
-	void set_selected( const Partition & partition );
+	void load_partitions (const std::vector<Partition> & partitions);
+	void set_selected (const Partition & partition);
 	void clear();
 
 	//signals for interclass communication
@@ -26,16 +26,16 @@ public:
 	sigc::signal< void, unsigned int, unsigned int > signal_popup_menu;
 
 private:
-	void load_partitions( const std::vector<Partition> & partitions,
+	void load_partitions (const std::vector<Partition> & partitions,
 			      bool & mountpoints,
 			      bool & labels,
-			      const Gtk::TreeRow & parent_row = Gtk::TreeRow() );
-	bool set_selected( Gtk::TreeModel::Children rows, const Partition & partition, bool inside_extended = false );
-	void create_row( const Gtk::TreeRow & treerow, const Partition & partition );
+			      const Gtk::TreeRow & parent_row = Gtk::TreeRow());
+	bool set_selected (Gtk::TreeModel::Children rows, const Partition & partition, bool inside_extended = false);
+	void create_row (const Gtk::TreeRow & treerow, const Partition & partition);
 
 	//(overridden) signals
-	bool on_button_press_event( GdkEventButton * event );
-	void on_row_activated( const Gtk::TreeModel::Path & path, Gtk::TreeViewColumn * column );
+	bool on_button_press_event (GdkEventButton * event);
+	void on_row_activated (const Gtk::TreeModel::Path & path, Gtk::TreeViewColumn * column);
 	void on_selection_changed();
 
 	Glib::RefPtr<Gtk::TreeStore> treestore_detail;
@@ -63,10 +63,10 @@ private:
 
 		treeview_detail_Columns()
 		{
-			add( path ); add( filesystem ); add( mountpoint ); add( label );
-			add( size ); add( used ); add( unused ); add( color );
-			add( text_color ); add( mount_text_color ); add( icon1 );
-			add( icon2 ); add( flags ); add( partition );
+			add (path); add (filesystem); add (mountpoint); add (label);
+			add (size); add (used); add (unused); add (color);
+			add (text_color); add (mount_text_color); add (icon1);
+			add (icon2); add (flags); add (partition);
 		}
 	};
 

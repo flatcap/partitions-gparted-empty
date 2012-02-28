@@ -11,8 +11,8 @@ public:
 	DrawingAreaVisualDisk();
 	~DrawingAreaVisualDisk();
 
-	void load_partitions( const std::vector<Partition> & partitions, Sector device_length );
-	void set_selected( const Partition & partition );
+	void load_partitions (const std::vector<Partition> & partitions, Sector device_length);
+	void set_selected (const Partition & partition);
 	void clear();
 
 	//public signals for interclass communication
@@ -24,30 +24,30 @@ private:
 	struct visual_partition;
 
 	//private functions
-	int get_total_separator_px( const std::vector<Partition> & partitions );
+	int get_total_separator_px (const std::vector<Partition> & partitions);
 
-	void set_static_data( const std::vector<Partition> & partitions,
+	void set_static_data (const std::vector<Partition> & partitions,
 			      std::vector<visual_partition> & visual_partitions,
-			      Sector length );
-	int calc_length( std::vector<visual_partition> & visual_partitions, int length_px );
-	void calc_position_and_height( std::vector<visual_partition> & visual_partitions, int start, int border );
-	void calc_used_unused( std::vector<visual_partition> & visual_partitions );
-	void calc_text( std::vector<visual_partition> & visual_partitions );
+			      Sector length);
+	int calc_length (std::vector<visual_partition> & visual_partitions, int length_px);
+	void calc_position_and_height (std::vector<visual_partition> & visual_partitions, int start, int border);
+	void calc_used_unused (std::vector<visual_partition> & visual_partitions);
+	void calc_text (std::vector<visual_partition> & visual_partitions);
 
-	void draw_partition( const visual_partition & vp );
-	void draw_partitions( const std::vector<visual_partition> & visual_partitions );
+	void draw_partition (const visual_partition & vp);
+	void draw_partitions (const std::vector<visual_partition> & visual_partitions);
 
-	void set_selected( const std::vector<visual_partition> & visual_partitions, int x, int y );
-	void set_selected( const std::vector<visual_partition> & visual_partitions, const Partition & partition );
+	void set_selected (const std::vector<visual_partition> & visual_partitions, int x, int y);
+	void set_selected (const std::vector<visual_partition> & visual_partitions, const Partition & partition);
 
-	int spreadout_leftover_px( std::vector<visual_partition> & visual_partitions, int pixels );
-	void free_colors( std::vector<visual_partition> & visual_partitions );
+	int spreadout_leftover_px (std::vector<visual_partition> & visual_partitions, int pixels);
+	void free_colors (std::vector<visual_partition> & visual_partitions);
 
 	//overridden signalhandlers
 	void on_realize();
-	bool on_expose_event( GdkEventExpose * event );
-	bool on_button_press_event( GdkEventButton * event );
-	void on_size_allocate( Gtk::Allocation & allocation );
+	bool on_expose_event (GdkEventExpose * event);
+	bool on_button_press_event (GdkEventButton * event);
+	void on_size_allocate (Gtk::Allocation & allocation);
 
 	//variables
 	struct visual_partition
@@ -80,14 +80,14 @@ private:
 			y_used_unused_start = used_unused_height =
 			x_text = y_text = 0;
 
-			pango_layout .clear();
-			logicals .clear();
+			pango_layout.clear();
+			logicals.clear();
 		}
 
 		~visual_partition()
 		{
-			pango_layout .clear();
-			logicals .clear();
+			pango_layout.clear();
+			logicals.clear();
 		}
 	};
 

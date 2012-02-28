@@ -10,13 +10,13 @@ public:
 	Device();
 	~Device();
 
-	void add_path( const Glib::ustring & path, bool clear_paths = false );
-	void add_paths( const std::vector<Glib::ustring> & paths, bool clear_paths = false );
+	void add_path (const Glib::ustring & path, bool clear_paths = false);
+	void add_paths (const std::vector<Glib::ustring> & paths, bool clear_paths = false);
 	Glib::ustring get_path() const;
 	std::vector<Glib::ustring> get_paths() const;
 
-	bool operator==( const Device & device ) const;
-	bool operator!=( const Device & device ) const;
+	bool operator== (const Device & device) const;
+	bool operator!= (const Device & device) const;
 
 	void Reset();
 	std::vector<Partition> partitions;
@@ -35,7 +35,7 @@ public:
 private:
 	void sort_paths_and_remove_duplicates();
 
-	static bool compare_paths( const Glib::ustring & A, const Glib::ustring & B );
+	static bool compare_paths (const Glib::ustring & A, const Glib::ustring & B);
 
 	std::vector<Glib::ustring> paths;
 

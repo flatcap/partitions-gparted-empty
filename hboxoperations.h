@@ -15,7 +15,7 @@ public:
 	HBoxOperations();
 	~HBoxOperations();
 
-	void load_operations( const std::vector<Operation *> operations );
+	void load_operations (const std::vector<Operation *> operations);
 	void clear();
 
 	sigc::signal< void > signal_undo;
@@ -24,7 +24,7 @@ public:
 	sigc::signal< void > signal_close;
 
 private:
-	bool on_signal_button_press_event( GdkEventButton * event );
+	bool on_signal_button_press_event (GdkEventButton * event);
 	void on_undo();
 	void on_clear();
 	void on_apply();
@@ -42,8 +42,8 @@ private:
 
 		treeview_operations_Columns()
 		{
-			add( operation_description );
-			add( operation_icon );
+			add (operation_description);
+			add (operation_icon);
 		}
 	};
 	treeview_operations_Columns treeview_operations_columns;
