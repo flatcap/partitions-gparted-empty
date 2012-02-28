@@ -47,11 +47,11 @@ private:
 	//convenience functions
 	void toggle_item (bool state, int menu_item, int toolbar_item = -1)
         {
-                if  (menu_item >= 0 && menu_item < static_cast<int> (menu_partition.items().size()))
+                if (menu_item >= 0 && menu_item < static_cast<int> (menu_partition.items().size()))
                         menu_partition.items()[ menu_item ].set_sensitive (state);
 
-                if  (toolbar_item >= 0 && toolbar_item < toolbar_main.get_n_items())
-                        toolbar_main.get_nth_item (toolbar_item) ->set_sensitive (state);
+                if (toolbar_item >= 0 && toolbar_item < toolbar_main.get_n_items())
+                        toolbar_main.get_nth_item (toolbar_item)->set_sensitive (state);
         }
 
 	void allow_new (bool state)	{
@@ -93,22 +93,22 @@ private:
 	void allow_undo_clear_apply (bool state)
 	{
 		toggle_item (state, -1, TOOLBAR_UNDO);
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu() ->items()[ 0 ])
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 0 ])
 			->set_sensitive (state);
 
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu() ->items()[ 1 ])
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 1 ])
 			->set_sensitive (state);
 
 		toggle_item (state, -1, TOOLBAR_APPLY);
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu() ->items()[ 2 ])
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 2 ])
 			->set_sensitive (state);
 	}
 
 	//threads..
 	void thread_refresh_devices();
-	void thread_unmount_partition (bool * succes, Glib::ustring * error);
-	void thread_mount_partition (Glib::ustring mountpoint, bool * succes, Glib::ustring * error);
-	void thread_toggle_swap (bool * succes, Glib::ustring * error);
+	void thread_unmount_partition (bool * success, Glib::ustring * error);
+	void thread_mount_partition (Glib::ustring mountpoint, bool * success, Glib::ustring * error);
+	void thread_toggle_swap (bool * success, Glib::ustring * error);
 	void thread_guess_partition_table();
 
 	//signal handlers

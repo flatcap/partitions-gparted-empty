@@ -23,14 +23,14 @@ Gtk::Label * Utils::mk_label (const Glib::ustring & text,
 
 	Gtk::Label * label = manage (new Gtk::Label (text, x_align, y_align));
 
-	label ->set_use_markup (use_markup);
-	label ->set_line_wrap (wrap);
-	label ->set_selectable (selectable);
+	label->set_use_markup (use_markup);
+	label->set_line_wrap (wrap);
+	label->set_selectable (selectable);
 
-	if  (text_color != "black")
+	if (text_color != "black")
 	{
 		Gdk::Color color (text_color);
-		label ->modify_fg (label ->get_state(), color);
+		label->modify_fg (label->get_state(), color);
 	}
 
 	return label;
@@ -82,13 +82,13 @@ Glib::RefPtr<Gdk::Pixbuf> Utils::get_color_as_pixbuf (FILESYSTEM filesystem, int
 {
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create (Gdk::COLORSPACE_RGB, false, 8, width, height);
 
-	if  (pixbuf)
+	if (pixbuf)
 	{
 		std::stringstream hex (get_color (filesystem).substr (1) + "00");
 		unsigned long dec;
 		hex >> std::hex >> dec;
 
-		pixbuf ->fill (dec);
+		pixbuf->fill (dec);
 	}
 
 	return pixbuf;
@@ -183,27 +183,27 @@ bool Utils::kernel_supports_fs (const Glib::ustring & fs)
 	std::ifstream input;
 	std::string line;
 	input.open ("/proc/filesystems");
-	if  (input)
+	if (input)
 	{
-		while  (input >> line)
-			if  (line == fs)
+		while (input >> line)
+			if (line == fs)
 			{
 				fs_supported = true;
 				break;
 			}
 		input.close();
 	}
-	if  (fs_supported)
+	if (fs_supported)
 		return true;
 
 	Glib::ustring output, error;
 	execute_command ("modprobe " + fs, output, error, true);
 
 	input.open ("/proc/filesystems");
-	if  (input)
+	if (input)
 	{
-		while  (input >> line)
-			if  (line == fs)
+		while (input >> line)
+			if (line == fs)
 			{
 				fs_supported = true;
 				break;
@@ -218,11 +218,11 @@ bool Utils::kernel_supports_fs (const Glib::ustring & fs)
 bool Utils::kernel_version_at_least (int major_ver, int minor_ver, int patch_ver)
 {
 	int actual_major_ver, actual_minor_ver, actual_patch_ver;
-	if  (! get_kernel_version (actual_major_ver, actual_minor_ver, actual_patch_ver))
+	if (! get_kernel_version (actual_major_ver, actual_minor_ver, actual_patch_ver))
 		return false;
-	bool result =     (actual_major_ver > major_ver)
-	              ||  (actual_major_ver == major_ver && actual_minor_ver > minor_ver)
-	              ||  (actual_major_ver == major_ver && actual_minor_ver == minor_ver && actual_patch_ver >= patch_ver);
+	bool result = (actual_major_ver > major_ver)
+	              || (actual_major_ver == major_ver && actual_minor_ver > minor_ver)
+	              || (actual_major_ver == major_ver && actual_minor_ver == minor_ver && actual_patch_ver >= patch_ver);
 	return result;
 }
 
@@ -231,22 +231,22 @@ Glib::ustring Utils::format_size (Sector sectors, Byte_Value sector_size)
 	std::stringstream ss;
 	ss << std::setiosflags (std::ios::fixed) << std::setprecision (2);
 
-	if  ((sectors * sector_size) < KIBIBYTE)
+	if ((sectors * sector_size) < KIBIBYTE)
 	{
 		ss << sector_to_unit (sectors, sector_size, UNIT_BYTE);
 		return String::ucompose ("%1 B", ss.str());
 	}
-	else if  ((sectors * sector_size) < MEBIBYTE)
+	else if ((sectors * sector_size) < MEBIBYTE)
 	{
 		ss << sector_to_unit (sectors, sector_size, UNIT_KIB);
 		return String::ucompose ("%1 KiB", ss.str());
 	}
-	else if  ((sectors * sector_size) < GIBIBYTE)
+	else if ((sectors * sector_size) < GIBIBYTE)
 	{
 		ss << sector_to_unit (sectors, sector_size, UNIT_MIB);
 		return String::ucompose ("%1 MiB", ss.str());
 	}
-	else if  ((sectors * sector_size) < TEBIBYTE)
+	else if ((sectors * sector_size) < TEBIBYTE)
 	{
 		ss << sector_to_unit (sectors, sector_size, UNIT_GIB);
 		return String::ucompose ("%1 GiB", ss.str());
@@ -263,18 +263,18 @@ Glib::ustring Utils::format_time (std::time_t seconds)
 	Glib::ustring time;
 
 	int unit = static_cast<int> (seconds / 3600);
-	if  (unit < 10)
+	if (unit < 10)
 		time += "0";
 	time += num_to_str (unit) + ":";
 	seconds %= 3600;
 
 	unit = static_cast<int> (seconds / 60);
-	if  (unit < 10)
+	if (unit < 10)
 		time += "0";
 	time += num_to_str (unit) + ":";
 	seconds %= 60;
 
-	if  (seconds < 10)
+	if (seconds < 10)
 		time += "0";
 	time += num_to_str (seconds);
 
@@ -283,19 +283,19 @@ Glib::ustring Utils::format_time (std::time_t seconds)
 
 double Utils::sector_to_unit (Sector sectors, Byte_Value sector_size, SIZE_UNIT size_unit)
 {
-	switch  (size_unit)
+	switch (size_unit)
 	{
 		case UNIT_BYTE	:
 			return sectors * sector_size;
 
 		case UNIT_KIB	:
-			return sectors /  (static_cast<double> (KIBIBYTE) / sector_size);
+			return sectors / (static_cast<double> (KIBIBYTE) / sector_size);
 		case UNIT_MIB	:
-			return sectors /  (static_cast<double> (MEBIBYTE) / sector_size);
+			return sectors / (static_cast<double> (MEBIBYTE) / sector_size);
 		case UNIT_GIB	:
-			return sectors /  (static_cast<double> (GIBIBYTE) / sector_size);
+			return sectors / (static_cast<double> (GIBIBYTE) / sector_size);
 		case UNIT_TIB	:
-			return sectors /  (static_cast<double> (TEBIBYTE) / sector_size);
+			return sectors / (static_cast<double> (TEBIBYTE) / sector_size);
 
 		default:
 			return sectors;
@@ -323,7 +323,7 @@ int Utils::execute_command (const Glib::ustring & command,
 		argv.push_back ("-c");
 		argv.push_back (command);
 
-		if  (use_C_locale)
+		if (use_C_locale)
 		{
 			//Spawn command using the C language environment
 			std::vector<std::string> envp;
@@ -353,7 +353,7 @@ int Utils::execute_command (const Glib::ustring & command,
 			               );
 		}
 	}
-	catch  (Glib::Exception & e)
+	catch (Glib::Exception & e)
 	{
 		 error = e.what();
 
@@ -378,9 +378,9 @@ Glib::ustring Utils::regexp_label (const Glib::ustring & text
 		                   , Glib::REGEX_CASELESS | Glib::REGEX_MULTILINE
 		                  );
 
-	results = myregexp ->split (text);
+	results = myregexp->split (text);
 
-	if  (results.size() >= 2)
+	if (results.size() >= 2)
 		return results[ 1 ];
 	else
 		return "";
@@ -507,7 +507,7 @@ Glib::ustring Utils::get_lang()
 	Glib::ustring replacement = "-";
 	//NOTE:  Application crashes if string replace is called and sought is not found,
 	//       so we need to only perform replace if the sought is found.
-	if  (lang.find(sought) != Glib::ustring::npos)
+	if (lang.find(sought) != Glib::ustring::npos)
 		lang.replace (lang.find(sought), sought.size(), replacement);
 
 	return lang;
@@ -515,7 +515,7 @@ Glib::ustring Utils::get_lang()
 
 //Extract a list of tokens from any number of background separator characters
 //  E.g., tokenize(str="  word1   word2   ", tokens, delimiters=" ")
-//        -> tokens=["word1","word2]
+//-> tokens=["word1","word2]
 //The tokenize method copied and adapted from:
 //  http://www.linuxselfhelp.com/HOWTO/C++Programming-HOWTO-7.html
 void Utils::tokenize (const Glib::ustring& str,
@@ -540,18 +540,18 @@ void Utils::tokenize (const Glib::ustring& str,
 
 //Split string on every delimiter, appending to the vector.  Inspired by:
 //  http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c/3616605#3616605
-//  E.g. using Utils::split(str, result, ":") for str -> result
-//  "" -> []   "a" -> ["a"]   "::" -> ["","",""]   ":a::bb" -> ["","a","","bb"]
+//  E.g. using Utils::split(str, result, ":") for str-> result
+//  ""-> []   "a"-> ["a"]   "::"-> ["","",""]   ":a::bb"-> ["","a","","bb"]
 void Utils::split (const Glib::ustring& str,
                    std::vector<Glib::ustring>& result,
                    const Glib::ustring& delimiters    )
 {
 	//Special case zero length string to empty vector
-	if  (str == "")
+	if (str == "")
 		return;
 	Glib::ustring::size_type fromPos  = 0;
 	Glib::ustring::size_type delimPos = str.find_first_of (delimiters);
-	while  (Glib::ustring::npos != delimPos)
+	while (Glib::ustring::npos != delimPos)
 	{
 		Glib::ustring word (str, fromPos, delimPos - fromPos);
 		result.push_back (word);
@@ -586,7 +586,7 @@ Glib::ustring Utils::generate_uuid(void)
 
 //private functions...
 
-//Read kernel version, reporting success or failure
+//Read kernel version, reporting successs or failure
 bool Utils::get_kernel_version (int & major_ver, int & minor_ver, int & patch_ver)
 {
 	static bool read_file = false;
@@ -594,12 +594,12 @@ bool Utils::get_kernel_version (int & major_ver, int & minor_ver, int & patch_ve
 	static int read_minor_ver = -1;
 	static int read_patch_ver = -1;
 
-	bool success = false;
-	if  (! read_file)
+	bool successs = false;
+	if (! read_file)
 	{
 		std::ifstream input ("/proc/version");
 		std::string line;
-		if  (input)
+		if (input)
 		{
 			getline (input, line);
 			sscanf (line.c_str(), "Linux version %d.%d.%d",
@@ -608,13 +608,13 @@ bool Utils::get_kernel_version (int & major_ver, int & minor_ver, int & patch_ve
 		}
 		read_file = true;
 	}
-	if  (read_major_ver > -1 && read_minor_ver > -1 && read_patch_ver > -1)
+	if (read_major_ver > -1 && read_minor_ver > -1 && read_patch_ver > -1)
 	{
 		major_ver = read_major_ver;
 		minor_ver = read_minor_ver;
 		patch_ver = read_patch_ver;
-		success = true;
+		successs = true;
 	}
-	return success;
+	return successs;
 }
 

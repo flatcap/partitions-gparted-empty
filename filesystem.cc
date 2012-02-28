@@ -17,7 +17,7 @@ const Glib::ustring FileSystem::get_generic_text (CUSTOM_TEXT ttype, int index)
 	static const Glib::ustring activate_text =  "_Mount" ;
 	static const Glib::ustring deactivate_text =  "_Unmount" ;
 
-	switch  (ttype) {
+	switch (ttype) {
 		case CTEXT_ACTIVATE_FILESYSTEM :
 			return index == 0 ? activate_text : "";
 		case CTEXT_DEACTIVATE_FILESYSTEM :
@@ -32,7 +32,7 @@ int FileSystem::execute_command (const Glib::ustring & command, OperationDetail 
 	return 0;
 }
 
-//Time command, add results to operation detail and by default set success or failure
+//Time command, add results to operation detail and by default set successs or failure
 int FileSystem::execute_command_timed (const Glib::ustring & command
                                      , OperationDetail & operationdetail
                                      , bool check_status)

@@ -27,7 +27,7 @@ GParted_Core::GParted_Core()
 	ped_exception_set_handler (ped_exception_handler);
 
 	//get valid flags...
-	for  (PedPartitionFlag flag = ped_partition_flag_next (static_cast<PedPartitionFlag> (NULL));
+	for (PedPartitionFlag flag = ped_partition_flag_next (static_cast<PedPartitionFlag> (NULL));
 	      flag;
 	      flag = ped_partition_flag_next (flag))
 		flags.push_back (flag);
@@ -46,9 +46,9 @@ void GParted_Core::find_supported_filesystems()
 	std::map< FILESYSTEM, FileSystem * >::iterator f;
 
 	// TODO: determine whether it is safe to initialize this only once
-	for  (f = FILESYSTEM_MAP.begin(); f != FILESYSTEM_MAP.end(); f++) {
-		if  (f ->second)
-			delete f ->second;
+	for (f = FILESYSTEM_MAP.begin(); f != FILESYSTEM_MAP.end(); f++) {
+		if (f->second)
+			delete f->second;
 	}
 
 	FILESYSTEM_MAP.clear();
@@ -59,11 +59,11 @@ void GParted_Core::find_supported_filesystems()
 	FILESYSTEMS.clear();
 
 	FS fs_notsupp;
-	for  (f = FILESYSTEM_MAP.begin(); f != FILESYSTEM_MAP.end(); f++) {
-		if  (f ->second)
-			FILESYSTEMS.push_back (f ->second ->get_filesystem_support());
+	for (f = FILESYSTEM_MAP.begin(); f != FILESYSTEM_MAP.end(); f++) {
+		if (f->second)
+			FILESYSTEMS.push_back (f->second->get_filesystem_support());
 		else {
-			fs_notsupp.filesystem = f ->first;
+			fs_notsupp.filesystem = f->first;
 			FILESYSTEMS.push_back (fs_notsupp);
 		}
 	}
@@ -71,8 +71,8 @@ void GParted_Core::find_supported_filesystems()
 
 void GParted_Core::set_user_devices (const std::vector<Glib::ustring> & user_devices)
 {
-	this ->device_paths = user_devices;
-	this ->probe_devices = ! user_devices.size();
+	this->device_paths = user_devices;
+	this->probe_devices = ! user_devices.size();
 }
 
 void GParted_Core::set_devices (std::vector<Device> & devices)
@@ -84,7 +84,7 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 	init_maps();
 
 	//only probe if no devices were specified as arguments..
-	if  (probe_devices)
+	if (probe_devices)
 	{
 		device_paths.clear();
 
@@ -95,13 +95,13 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 		//
 		//try to find all available devices if devices exist in /proc/partitions
 		std::vector<Glib::ustring> temp_devices = pp_info.get_device_paths();
-		if  (! temp_devices.empty())
+		if (! temp_devices.empty())
 		{
 			//Try to find all devices in /proc/partitions
 			for (unsigned int k=0; k < temp_devices.size(); k++)
 			{
 				/*TO TRANSLATORS: looks like Scanning /dev/sda */
-				set_thread_status_message (String::ucompose  ("Scanning %1", temp_devices[ k ]));
+				set_thread_status_message (String::ucompose ("Scanning %1", temp_devices[ k ]));
 				ped_device_get (temp_devices[ k ].c_str());
 			}
 
@@ -113,19 +113,19 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 		}
 
 		lp_device = ped_device_get_next (NULL);
-		while  (lp_device)
+		while (lp_device)
 		{
 			//only add this device if we can read the first sector (which means it's a real device)
-			char * buf = static_cast<char *> (malloc (lp_device ->sector_size));
-			if  (buf)
+			char * buf = static_cast<char *> (malloc (lp_device->sector_size));
+			if (buf)
 			{
 				/*TO TRANSLATORS: looks like Confirming /dev/sda */
-				set_thread_status_message (String::ucompose  ("Confirming %1", lp_device ->path));
-				if  (ped_device_open (lp_device))
+				set_thread_status_message (String::ucompose ("Confirming %1", lp_device->path));
+				if (ped_device_open (lp_device))
 				{
 					//Devices with sector sizes of 512 bytes and higher are supported
-					if  (ped_device_read (lp_device, buf, 0, 1))
-						device_paths.push_back (lp_device ->path);
+					if (ped_device_read (lp_device, buf, 0, 1))
+						device_paths.push_back (lp_device->path);
 					ped_device_close (lp_device);
 				}
 				free (buf);
@@ -137,11 +137,11 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 		std::sort (device_paths.begin(), device_paths.end());
 	}
 
-	for  (unsigned int t = 0; t < device_paths.size(); t++)
+	for (unsigned int t = 0; t < device_paths.size(); t++)
 	{
 		/*TO TRANSLATORS: looks like Searching /dev/sda partitions */
-		set_thread_status_message (String::ucompose  ("Searching %1 partitions", device_paths[ t ]));
-		if  (open_device_and_disk (device_paths[ t ], false))
+		set_thread_status_message (String::ucompose ("Searching %1 partitions", device_paths[ t ]));
+		if (open_device_and_disk (device_paths[ t ], false))
 		{
 			temp_device.Reset();
 
@@ -149,29 +149,29 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 			temp_device.add_path (device_paths[ t ]);
 			temp_device.add_paths (pp_info.get_alternate_paths (temp_device.get_path()));
 
-			temp_device.model	=	lp_device ->model;
-			temp_device.length	=	lp_device ->length;
-			temp_device.sector_size	=	lp_device ->sector_size;
-			temp_device.heads	=	lp_device ->bios_geom.heads;
-			temp_device.sectors	=	lp_device ->bios_geom.sectors;
-			temp_device.cylinders	=	lp_device ->bios_geom.cylinders;
+			temp_device.model	=	lp_device->model;
+			temp_device.length	=	lp_device->length;
+			temp_device.sector_size	=	lp_device->sector_size;
+			temp_device.heads	=	lp_device->bios_geom.heads;
+			temp_device.sectors	=	lp_device->bios_geom.sectors;
+			temp_device.cylinders	=	lp_device->bios_geom.cylinders;
 			temp_device.cylsize	=	temp_device.heads * temp_device.sectors;
 
 			//make sure cylsize is at least 1 MiB
-			if  (temp_device.cylsize < (MEBIBYTE / temp_device.sector_size))
+			if (temp_device.cylsize < (MEBIBYTE / temp_device.sector_size))
 				temp_device.cylsize = (MEBIBYTE / temp_device.sector_size);
 
 			//normal harddisk
-			if  (lp_disk)
+			if (lp_disk)
 			{
-				temp_device.disktype =	lp_disk ->type ->name;
+				temp_device.disktype =	lp_disk->type->name;
 				temp_device.max_prims = ped_disk_get_max_primary_partition_count (lp_disk);
 
 				set_device_partitions (temp_device);
 				set_mountpoints (temp_device.partitions);
 				set_used_sectors (temp_device.partitions);
 
-				if  (temp_device.highest_busy)
+				if (temp_device.highest_busy)
 				{
 					temp_device.readonly = ! commit_to_os (1);
 					//Clear libparted messages.  Typically these are:
@@ -269,10 +269,10 @@ bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partitio
 
 	//Determine if partition size is less than half a disk cylinder
 	bool less_than_half_cylinder = false;
-	if  ((partition.sector_end - partition.sector_start) <  (device.cylsize / 2))
+	if ((partition.sector_end - partition.sector_start) < (device.cylsize / 2))
 		less_than_half_cylinder = true;
 
-	if  (partition.type == TYPE_LOGICAL ||
+	if (partition.type == TYPE_LOGICAL ||
 	     partition.sector_start == device.sectors
 	  )
 	{
@@ -283,7 +283,7 @@ bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partitio
 		//     primary partition
 		diff = (partition.sector_start - device.sectors) % device.cylsize;
 	}
-	else if  (partition.sector_start == 34)
+	else if (partition.sector_start == 34)
 	{
 		// (C) the GUID Partition Table (GPT) and the start of the data
 		//     partition at sector 34
@@ -293,18 +293,18 @@ bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partitio
 	{
 		diff = partition.sector_start % device.cylsize;
 	}
-	if  (diff && ! partition.strict_start )
+	if (diff && ! partition.strict_start )
 	{
-		if  (diff <  (device.cylsize / 2) || less_than_half_cylinder)
+		if (diff < (device.cylsize / 2) || less_than_half_cylinder)
 			partition.sector_start -= diff;
 		else
 			partition.sector_start += (device.cylsize - diff);
 	}
 
 	diff = (partition.sector_end +1) % device.cylsize;
-	if  (diff)
+	if (diff)
 	{
-		if  (diff <  (device.cylsize / 2) && ! less_than_half_cylinder)
+		if (diff < (device.cylsize / 2) && ! less_than_half_cylinder)
 			partition.sector_end -= diff;
 		else
 			partition.sector_end += (device.cylsize - diff);
@@ -316,7 +316,7 @@ bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partitio
 bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partition, Glib::ustring & error)
 {
 	Sector diff = 0;
-	if  (partition.sector_start < 2 || partition.type == TYPE_LOGICAL)
+	if (partition.sector_start < 2 || partition.type == TYPE_LOGICAL)
 	{
 		//Must account the relative offset between:
 		// (A) the Master Boot Record sector and the first primary/extended partition, and
@@ -325,9 +325,9 @@ bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partitio
 		//If strict_start is set then do not adjust sector start.
 		//If this partition is not simply queued for a reformat then
 		//  add space minimum to force alignment to next mebibyte.
-		if  (  (! partition.strict_start)
+		if ( (! partition.strict_start)
 		    && (partition.free_space_before == 0)
-		    &&  (partition.status != STAT_FORMATTED)
+		    && (partition.status != STAT_FORMATTED)
 		  )
 		{
 			//Unless specifically told otherwise, the Linux kernel considers extended
@@ -337,39 +337,39 @@ bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partitio
 	}
 
 	//Align start sector
-	diff = Sector(partition.sector_start %  (MEBIBYTE / partition.sector_size));
-	if  (diff &&  (  (! partition.strict_start)
-	              ||  (  partition.strict_start
-	                  &&  (  partition.status == STAT_NEW
+	diff = Sector(partition.sector_start % (MEBIBYTE / partition.sector_size));
+	if (diff && ( (! partition.strict_start)
+	              || (  partition.strict_start
+	                  && (  partition.status == STAT_NEW
 	                      || partition.status == STAT_COPY
 	                    )
 	                )
 	            )
 	  )
-		partition.sector_start +=  ((MEBIBYTE / partition.sector_size) - diff);
+		partition.sector_start += ((MEBIBYTE / partition.sector_size) - diff);
 
 	//If this is a logical partition not at end of drive then check to see if space is
 	//  required for a following logical partition Extended Boot Record
-	if  (partition.type == TYPE_LOGICAL)
+	if (partition.type == TYPE_LOGICAL)
 	{
 		//Locate the extended partition that contains the logical partitions.
 		int index_extended = -1;
-		for  (unsigned int t = 0; t < device.partitions.size(); t++)
+		for (unsigned int t = 0; t < device.partitions.size(); t++)
 		{
-			if  (device.partitions[ t ].type == TYPE_EXTENDED)
+			if (device.partitions[ t ].type == TYPE_EXTENDED)
 				index_extended = t;
 		}
 
 		//If there is a following logical partition that starts a mebibyte or less
 		//  from the end of this partition, then reserve a mebibyte for the EBR.
-		if  (index_extended != -1)
+		if (index_extended != -1)
 		{
-			for  (unsigned int t = 0; t < device.partitions[ index_extended ].logicals.size(); t++)
+			for (unsigned int t = 0; t < device.partitions[ index_extended ].logicals.size(); t++)
 			{
-				if  (   (device.partitions[ index_extended ].logicals[ t ].type == TYPE_LOGICAL)
-				    &&  (device.partitions[ index_extended ].logicals[ t ].sector_start > partition.sector_end)
-				    &&  ((device.partitions[ index_extended ].logicals[ t ].sector_start - partition.sector_end)
-				         <  (MEBIBYTE / device.sector_size)
+				if ( (device.partitions[ index_extended ].logicals[ t ].type == TYPE_LOGICAL)
+				    && (device.partitions[ index_extended ].logicals[ t ].sector_start > partition.sector_end)
+				    && ((device.partitions[ index_extended ].logicals[ t ].sector_start - partition.sector_end)
+				         < (MEBIBYTE / device.sector_size)
 				      )
 				  )
 					partition.sector_end -= 1;
@@ -379,16 +379,16 @@ bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partitio
 
 	//If this is a GPT partition table then reserve a mebibyte at the end of the device
 	//  for the backup partition table
-	if  (   device.disktype == "gpt"
-	    &&  ((device.length - partition.sector_end) <=  (MEBIBYTE / device.sector_size))
+	if (   device.disktype == "gpt"
+	    && ((device.length - partition.sector_end) <= (MEBIBYTE / device.sector_size))
 	  )
 	{
 		partition.sector_end -= 1;
 	}
 
 	//Align end sector
-	diff = (partition.sector_end + 1) %  (MEBIBYTE / partition.sector_size);
-	if  (diff)
+	diff = (partition.sector_end + 1) % (MEBIBYTE / partition.sector_size);
+	if (diff)
 		partition.sector_end -= diff;
 
 	return true;
@@ -398,19 +398,19 @@ bool GParted_Core::snap_to_alignment (const Device & device, Partition & partiti
 {
 	bool rc = true;
 
-	if  (partition.alignment == ALIGN_CYLINDER)
+	if (partition.alignment == ALIGN_CYLINDER)
 		rc = snap_to_cylinder (device, partition, error);
-	else if  (partition.alignment == ALIGN_MEBIBYTE)
+	else if (partition.alignment == ALIGN_MEBIBYTE)
 		rc = snap_to_mebibyte (device, partition, error);
 
 	//Ensure that partition start and end are not beyond the ends of the disk device
-	if  (partition.sector_start < 0)
+	if (partition.sector_start < 0)
 		partition.sector_start = 0;
-	if  (partition.sector_end > device.length)
+	if (partition.sector_end > device.length)
 		partition.sector_end = device.length - 1;
 
 	//do some basic checks on the partition
-	if  (partition.get_sector_length() <= 0)
+	if (partition.get_sector_length() <= 0)
 	{
 		error = String::ucompose(
 				/* TO TRANSLATORS:  looks like   A partition cannot have a length of -1 sectors */
@@ -419,7 +419,7 @@ bool GParted_Core::snap_to_alignment (const Device & device, Partition & partiti
 		return false;
 	}
 
-	if  (partition.get_sector_length() < partition.sectors_used)
+	if (partition.get_sector_length() < partition.sectors_used)
 	{
 		error = String::ucompose(
 				/* TO TRANSLATORS: looks like   A partition with used sectors (2048) greater than its length (1536) is not valid */
@@ -448,28 +448,28 @@ bool GParted_Core::set_disklabel (const Glib::ustring & device_path, const Glib:
 
 bool GParted_Core::toggle_flag (const Partition & partition, const Glib::ustring & flag, bool state)
 {
-	bool succes = false;
+	bool success = false;
 
-	if  (open_device_and_disk (partition.device_path))
+	if (open_device_and_disk (partition.device_path))
 	{
 		lp_partition = NULL;
-		if  (partition.type == TYPE_EXTENDED)
+		if (partition.type == TYPE_EXTENDED)
 			lp_partition = ped_disk_extended_partition (lp_disk);
 		else
 			lp_partition = ped_disk_get_partition_by_sector (lp_disk, partition.get_sector());
 
-		if  (lp_partition)
+		if (lp_partition)
 		{
 			PedPartitionFlag lp_flag = ped_partition_flag_get_by_name (flag.c_str());
 
-			if  (lp_flag > 0 && ped_partition_set_flag (lp_partition, lp_flag, state))
-				succes = commit();
+			if (lp_flag > 0 && ped_partition_set_flag (lp_partition, lp_flag, state))
+				success = commit();
 		}
 
 		close_device_and_disk();
 	}
 
-	return succes;
+	return success;
 }
 
 const std::vector<FS> & GParted_Core::get_filesystems() const
@@ -482,15 +482,15 @@ const FS & GParted_Core::get_fs (FILESYSTEM filesystem) const
 	unsigned int unknown;
 
 	unknown = FILESYSTEMS.size();
-	for  (unsigned int t = 0; t < FILESYSTEMS.size(); t++)
+	for (unsigned int t = 0; t < FILESYSTEMS.size(); t++)
 	{
-		if  (FILESYSTEMS[ t ].filesystem == filesystem)
+		if (FILESYSTEMS[ t ].filesystem == filesystem)
 			return FILESYSTEMS[ t ];
-		else if  (FILESYSTEMS[ t ].filesystem == FS_UNKNOWN)
+		else if (FILESYSTEMS[ t ].filesystem == FS_UNKNOWN)
 			unknown = t;
 	}
 
-	if  (unknown == FILESYSTEMS.size()) {
+	if (unknown == FILESYSTEMS.size()) {
 		// This shouldn't happen, but just in case...
 		static FS fs;
 		fs.filesystem = FS_UNKNOWN;
@@ -507,8 +507,8 @@ std::vector<Glib::ustring> GParted_Core::get_disklabeltypes()
 	disklabeltypes.push_back ("msdos");
 
 	 PedDiskType *disk_type;
-	 for  (disk_type = ped_disk_type_get_next (NULL); disk_type; disk_type = ped_disk_type_get_next (disk_type))
-		 if  (Glib::ustring (disk_type->name) != "msdos")
+	 for (disk_type = ped_disk_type_get_next (NULL); disk_type; disk_type = ped_disk_type_get_next (disk_type))
+		 if (Glib::ustring (disk_type->name) != "msdos")
 			disklabeltypes.push_back (disk_type->name);
 
 	 return disklabeltypes;
@@ -518,8 +518,8 @@ std::vector<Glib::ustring> GParted_Core::get_all_mountpoints()
 {
 	std::vector<Glib::ustring> mountpoints;
 
-	for  (iter_mp = mount_info.begin(); iter_mp != mount_info.end(); ++iter_mp)
-		mountpoints.insert (mountpoints.end(), iter_mp ->second.begin(), iter_mp ->second.end());
+	for (iter_mp = mount_info.begin(); iter_mp != mount_info.end(); ++iter_mp)
+		mountpoints.insert (mountpoints.end(), iter_mp->second.begin(), iter_mp->second.end());
 
 	return mountpoints;
 }
@@ -528,18 +528,18 @@ std::map<Glib::ustring, bool> GParted_Core::get_available_flags (const Partition
 {
 	std::map<Glib::ustring, bool> flag_info;
 
-	if  (open_device_and_disk (partition.device_path))
+	if (open_device_and_disk (partition.device_path))
 	{
 		lp_partition = NULL;
-		if  (partition.type == TYPE_EXTENDED)
+		if (partition.type == TYPE_EXTENDED)
 			lp_partition = ped_disk_extended_partition (lp_disk);
 		else
 			lp_partition = ped_disk_get_partition_by_sector (lp_disk, partition.get_sector());
 
-		if  (lp_partition)
+		if (lp_partition)
 		{
-			for  (unsigned int t = 0; t < flags.size(); t++)
-				if  (ped_partition_is_flag_available (lp_partition, flags[ t ]))
+			for (unsigned int t = 0; t < flags.size(); t++)
+				if (ped_partition_is_flag_available (lp_partition, flags[ t ]))
 					flag_info[ ped_partition_flag_get_name (flags[ t ]) ] =
 						ped_partition_get_flag (lp_partition, flags[ t ]);
 		}
@@ -568,13 +568,13 @@ void GParted_Core::init_maps()
 	read_mountpoints_from_file ("/etc/fstab", fstab_info);
 
 	//sort the mount points and remove duplicates.. (no need to do this for fstab_info)
-	for  (iter_mp = mount_info.begin(); iter_mp != mount_info.end(); ++iter_mp)
+	for (iter_mp = mount_info.begin(); iter_mp != mount_info.end(); ++iter_mp)
 	{
-		std::sort (iter_mp ->second.begin(), iter_mp ->second.end());
+		std::sort (iter_mp->second.begin(), iter_mp->second.end());
 
-		iter_mp ->second.erase(
-				std::unique (iter_mp ->second.begin(), iter_mp ->second.end()),
-				iter_mp ->second.end());
+		iter_mp->second.erase(
+				std::unique (iter_mp->second.begin(), iter_mp->second.end()),
+				iter_mp->second.end());
 	}
 }
 
@@ -584,31 +584,31 @@ void GParted_Core::read_mountpoints_from_file(
 {
 	FILE* fp = setmntent (filename.c_str(), "r");
 
-	if  (fp == NULL)
+	if (fp == NULL)
 		return;
 
 	struct mntent* p = NULL;
 
-	while  ((p = getmntent(fp)) != NULL)
+	while ((p = getmntent(fp)) != NULL)
 	{
 		Glib::ustring node = p->mnt_fsname;
 
-		if  (! node.empty())
+		if (! node.empty())
 		{
 			Glib::ustring mountpoint = p->mnt_dir;
 
 			//Only add node path(s) if mount point exists
-			if  (file_test (mountpoint, Glib::FILE_TEST_EXISTS))
+			if (file_test (mountpoint, Glib::FILE_TEST_EXISTS))
 			{
 				map[ node ].push_back (mountpoint);
 
 				//If node is a symbolic link (e.g., /dev/root)
 				//  then find real path and add entry
-				if  (file_test (node, Glib::FILE_TEST_IS_SYMLINK))
+				if (file_test (node, Glib::FILE_TEST_IS_SYMLINK))
 				{
 					char c_str[4096+1];
 					//FIXME: it seems realpath is very unsafe to use (manpage)...
-					if  (realpath (node.c_str(), c_str) != NULL)
+					if (realpath (node.c_str(), c_str) != NULL)
 						map[ c_str ].push_back (mountpoint);
 				}
 			}
@@ -626,12 +626,12 @@ void GParted_Core::read_mountpoints_from_file_swaps(
 	std::string node;
 
 	std::ifstream file (filename.c_str());
-	if  (file)
+	if (file)
 	{
-		while  (getline (file, line))
+		while (getline (file, line))
 		{
 			node = Utils::regexp_label (line, "^(/[^ ]+)");
-			if  (node.size() > 0)
+			if (node.size() > 0)
 				map[ node ].push_back ("" /* no mountpoint for swap */);
 		}
 		file.close();
@@ -644,7 +644,7 @@ Glib::ustring GParted_Core::get_partition_path (PedPartition * lp_partition)
 	Glib::ustring partition_path = "Partition path not found";
 
 	lp_path = ped_partition_get_path(lp_partition);
-	if  (lp_path != NULL)
+	if (lp_path != NULL)
 	{
 		partition_path = lp_path;
 		free(lp_path);
@@ -662,7 +662,7 @@ void GParted_Core::set_device_partitions (Device & device)
 	device.partitions.clear();
 
 	lp_partition = ped_disk_next_partition (lp_disk, NULL);
-	while  (lp_partition)
+	while (lp_partition)
 	{
 		libparted_messages.clear();
 		partition_temp.Reset();
@@ -672,7 +672,7 @@ void GParted_Core::set_device_partitions (Device & device)
 		//Retrieve partition path
 		Glib::ustring partition_path = get_partition_path (lp_partition);
 
-		switch  (lp_partition ->type)
+		switch (lp_partition->type)
 		{
 			case PED_PARTITION_NORMAL:
 			case PED_PARTITION_LOGICAL:
@@ -681,19 +681,19 @@ void GParted_Core::set_device_partitions (Device & device)
 
 				partition_temp.Set (device.get_path(),
 						     partition_path,
-						     lp_partition ->num,
-						     lp_partition ->type == 0 ?	TYPE_PRIMARY : TYPE_LOGICAL,
+						     lp_partition->num,
+						     lp_partition->type == 0 ?	TYPE_PRIMARY : TYPE_LOGICAL,
 						     filesystem,
-						     lp_partition ->geom.start,
-						     lp_partition ->geom.end,
+						     lp_partition->geom.start,
+						     lp_partition->geom.end,
 						     device.sector_size,
-						     lp_partition ->type,
+						     lp_partition->type,
 						     partition_is_busy);
 
 				partition_temp.add_paths (pp_info.get_alternate_paths (partition_temp.get_path()));
 				set_flags (partition_temp);
 
-				if  (partition_temp.busy && partition_temp.partition_number > device.highest_busy)
+				if (partition_temp.busy && partition_temp.partition_number > device.highest_busy)
 					device.highest_busy = partition_temp.partition_number;
 
 				break;
@@ -703,11 +703,11 @@ void GParted_Core::set_device_partitions (Device & device)
 
 				partition_temp.Set (device.get_path(),
 						     partition_path,
-						     lp_partition ->num,
+						     lp_partition->num,
 						     TYPE_EXTENDED,
 						     FS_EXTENDED,
-						     lp_partition ->geom.start,
-						     lp_partition ->geom.end,
+						     lp_partition->geom.start,
+						     lp_partition->geom.end,
 						     device.sector_size,
 						     false,
 						     partition_is_busy);
@@ -723,17 +723,17 @@ void GParted_Core::set_device_partitions (Device & device)
 		}
 
 		//Avoid reading additional file system information if there is no path
-		if  (partition_temp.get_path() != "")
+		if (partition_temp.get_path() != "")
 		{
 			//Retrieve file system label
 			read_label (partition_temp);
-			if  (partition_temp.label.empty())
+			if (partition_temp.label.empty())
 			{
 			}
 
 			//Retrieve file system UUID
 			read_uuid (partition_temp);
-			if  (partition_temp.uuid.empty())
+			if (partition_temp.uuid.empty())
 			{
 			}
 		}
@@ -743,9 +743,9 @@ void GParted_Core::set_device_partitions (Device & device)
 						  libparted_messages.end());
 
 		//if there's an end, there's a partition;)
-		if  (partition_temp.sector_end > -1)
+		if (partition_temp.sector_end > -1)
 		{
-			if  (! partition_temp.inside_extended)
+			if (! partition_temp.inside_extended)
 				device.partitions.push_back (partition_temp);
 			else
 				device.partitions[ EXT_INDEX ].logicals.push_back (partition_temp);
@@ -755,7 +755,7 @@ void GParted_Core::set_device_partitions (Device & device)
 		lp_partition = ped_disk_next_partition (lp_disk, lp_partition);
 	}
 
-	if  (EXT_INDEX > -1)
+	if (EXT_INDEX > -1)
 		insert_unallocated (device.get_path(),
 				    device.partitions[ EXT_INDEX ].logicals,
 				    device.partitions[ EXT_INDEX ].sector_start,
@@ -776,16 +776,16 @@ FILESYSTEM GParted_Core::get_filesystem()
 	//  libparted as 'ext3'.
 
 	//LUKS encryption
-	char * buf = static_cast<char *> (malloc (lp_device ->sector_size));
-	if  (buf)
+	char * buf = static_cast<char *> (malloc (lp_device->sector_size));
+	if (buf)
 	{
 		ped_device_open (lp_device);
-		ped_geometry_read (& lp_partition ->geom, buf, 0, 1);
+		ped_geometry_read (& lp_partition->geom, buf, 0, 1);
 		memcpy(magic1, buf+0, 6);  //set binary magic data
 		ped_device_close (lp_device);
 		free (buf);
 
-		if  (0 == memcmp (magic1 , "LUKS\xBA\xBE", 6))
+		if (0 == memcmp (magic1 , "LUKS\xBA\xBE", 6))
 		{
 			temp =  "Linux Unified Key Setup encryption is not yet supported." ;
 			temp += "\n";
@@ -797,9 +797,9 @@ FILESYSTEM GParted_Core::get_filesystem()
 	Glib::ustring fs_type = "";
 
 	//Standard libparted file system detection
-	if  (lp_partition && lp_partition ->fs_type)
+	if (lp_partition && lp_partition->fs_type)
 	{
-		fs_type = lp_partition ->fs_type ->name;
+		fs_type = lp_partition->fs_type->name;
 
 		//TODO:  Temporary code to detect ext4.
 		//       Replace when libparted >= 1.9.0 is chosen as minimum required version.
@@ -807,55 +807,55 @@ FILESYSTEM GParted_Core::get_filesystem()
 
 	//FS_Info (blkid) file system detection because current libparted (v2.2) does not
 	//  appear to detect file systems for sector sizes other than 512 bytes.
-	if  (fs_type.empty())
+	if (fs_type.empty())
 	{
 		//TODO: blkid does not return anything for an "extended" partition.  Need to handle this somehow
 	}
 
-	if  (! fs_type.empty())
+	if (! fs_type.empty())
 	{
-		if  (fs_type == "extended")
+		if (fs_type == "extended")
 			return FS_EXTENDED;
-		else if  (fs_type == "btrfs")
+		else if (fs_type == "btrfs")
 			return FS_BTRFS;
-		else if  (fs_type == "exfat")
+		else if (fs_type == "exfat")
 			return FS_EXFAT;
-		else if  (fs_type == "ext2")
+		else if (fs_type == "ext2")
 			return FS_EXT2;
-		else if  (fs_type == "ext3")
+		else if (fs_type == "ext3")
 			return FS_EXT3;
-		else if  (fs_type == "ext4" ||
+		else if (fs_type == "ext4" ||
 		          fs_type == "ext4dev")
 			return FS_EXT4;
-		else if  (fs_type == "linux-swap" ||
+		else if (fs_type == "linux-swap" ||
 		          fs_type == "linux-swap(v1)" ||
 		          fs_type == "linux-swap(new)" ||
 		          fs_type == "linux-swap(v0)" ||
 		          fs_type == "linux-swap(old)" ||
 		          fs_type == "swap")
 			return FS_LINUX_SWAP;
-		else if  (fs_type == "LVM2_member")
+		else if (fs_type == "LVM2_member")
 			return FS_LVM2_PV;
-		else if  (fs_type == "fat16")
+		else if (fs_type == "fat16")
 			return FS_FAT16;
-		else if  (fs_type == "fat32")
+		else if (fs_type == "fat32")
 			return FS_FAT32;
-		else if  (fs_type == "nilfs2")
+		else if (fs_type == "nilfs2")
 			return FS_NILFS2;
-		else if  (fs_type == "ntfs")
+		else if (fs_type == "ntfs")
 			return FS_NTFS;
-		else if  (fs_type == "reiserfs")
+		else if (fs_type == "reiserfs")
 			return FS_REISERFS;
-		else if  (fs_type == "xfs")
+		else if (fs_type == "xfs")
 			return FS_XFS;
-		else if  (fs_type == "jfs")
+		else if (fs_type == "jfs")
 			return FS_JFS;
-		else if  (fs_type == "hfs")
+		else if (fs_type == "hfs")
 			return FS_HFS;
-		else if  (fs_type == "hfs+" ||
+		else if (fs_type == "hfs+" ||
 		          fs_type == "hfsplus")
 			return FS_HFSPLUS;
-		else if  (fs_type == "ufs")
+		else if (fs_type == "ufs")
 			return FS_UFS;
 	}
 
@@ -863,45 +863,45 @@ FILESYSTEM GParted_Core::get_filesystem()
 	// - no patches sent to parted for lvm2, or luks
 
 	//reiser4
-	buf = static_cast<char *> (malloc (lp_device ->sector_size));
-	if  (buf)
+	buf = static_cast<char *> (malloc (lp_device->sector_size));
+	if (buf)
 	{
 		ped_device_open (lp_device);
-		ped_geometry_read (& lp_partition ->geom
+		ped_geometry_read (& lp_partition->geom
 		                 , buf
-		                 , (65536 / lp_device ->sector_size)
+		                 , (65536 / lp_device->sector_size)
 		                 , 1
 		                );
 		memcpy(magic1, buf+0, 7); //set binary magic data
 		ped_device_close (lp_device);
 		free (buf);
 
-		if  (0 == memcmp (magic1, "ReIsEr4", 7))
+		if (0 == memcmp (magic1, "ReIsEr4", 7))
 			return FS_REISER4;
 	}
 
 	//lvm2
 	//NOTE: lvm2 is not a file system but we do wish to recognize the Physical Volume
-	buf = static_cast<char *> (malloc (lp_device ->sector_size));
-	if  (buf)
+	buf = static_cast<char *> (malloc (lp_device->sector_size));
+	if (buf)
 	{
 		ped_device_open (lp_device);
-		if  (lp_device ->sector_size == 512)
+		if (lp_device->sector_size == 512)
 		{
-			ped_geometry_read (& lp_partition ->geom, buf, 1, 1);
+			ped_geometry_read (& lp_partition->geom, buf, 1, 1);
 			memcpy(magic1, buf+ 0, 8); // set binary magic data
 			memcpy(magic2, buf+24, 4); // set binary magic data
 		}
 		else
 		{
-			ped_geometry_read (& lp_partition ->geom, buf, 0, 1);
+			ped_geometry_read (& lp_partition->geom, buf, 0, 1);
 			memcpy(magic1, buf+ 0+512, 8); // set binary magic data
 			memcpy(magic2, buf+24+512, 4); // set binary magic data
 		}
 		ped_device_close (lp_device);
 		free (buf);
 
-		if  (   0 == memcmp (magic1, "LABELONE", 8)
+		if (   0 == memcmp (magic1, "LABELONE", 8)
 		     && 0 == memcmp (magic2, "LVM2", 4))
 		{
 			return FS_LVM2_PV;
@@ -916,15 +916,15 @@ FILESYSTEM GParted_Core::get_filesystem()
 	char    buf_btrfs[BTRFS_SUPER_INFO_SIZE];
 
 	ped_device_open (lp_device);
-	ped_geometry_read (& lp_partition ->geom
+	ped_geometry_read (& lp_partition->geom
 	                 , buf_btrfs
-	                 , (BTRFS_SUPER_INFO_OFFSET / lp_device ->sector_size)
-	                 , (BTRFS_SUPER_INFO_SIZE / lp_device ->sector_size)
+	                 , (BTRFS_SUPER_INFO_OFFSET / lp_device->sector_size)
+	                 , (BTRFS_SUPER_INFO_SIZE / lp_device->sector_size)
 	                );
 	memcpy(magic1, buf_btrfs+64, strlen(BTRFS_SIGNATURE));  //set binary magic data
 	ped_device_close (lp_device);
 
-	if  (0 == memcmp (magic1, BTRFS_SIGNATURE, strlen(BTRFS_SIGNATURE)))
+	if (0 == memcmp (magic1, BTRFS_SIGNATURE, strlen(BTRFS_SIGNATURE)))
 	{
 		return FS_BTRFS;
 	}
@@ -948,13 +948,13 @@ FILESYSTEM GParted_Core::get_filesystem()
 
 void GParted_Core::read_label (Partition & partition)
 {
-	if  (partition.type != TYPE_EXTENDED)
+	if (partition.type != TYPE_EXTENDED)
 	{
 		switch (get_fs (partition.filesystem).read_label)
 		{
 			case FS::EXTERNAL:
-				if  (set_proper_filesystem (partition.filesystem))
-					p_filesystem ->read_label (partition);
+				if (set_proper_filesystem (partition.filesystem))
+					p_filesystem->read_label (partition);
 				break;
 			default:
 				break;
@@ -964,13 +964,13 @@ void GParted_Core::read_label (Partition & partition)
 
 void GParted_Core::read_uuid (Partition & partition)
 {
-	if  (partition.type != TYPE_EXTENDED)
+	if (partition.type != TYPE_EXTENDED)
 	{
 		switch (get_fs (partition.filesystem).read_uuid)
 		{
 			case FS::EXTERNAL:
-				if  (set_proper_filesystem (partition.filesystem))
-					p_filesystem ->read_uuid (partition);
+				if (set_proper_filesystem (partition.filesystem))
+					p_filesystem->read_uuid (partition);
 				break;
 
 			default:
@@ -990,7 +990,7 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 	partition_temp.Set_Unallocated (device_path, 0, 0, sector_size, inside_extended);
 
 	//if there are no partitions at all..
-	if  (partitions.empty())
+	if (partitions.empty())
 	{
 		partition_temp.sector_start = start;
 		partition_temp.sector_end = end;
@@ -1001,7 +1001,7 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 	}
 
 	//start <---> first partition start
-	if  ((partitions.front().sector_start - start) > (MEBIBYTE / sector_size))
+	if ((partitions.front().sector_start - start) > (MEBIBYTE / sector_size))
 	{
 		partition_temp.sector_start = start;
 		partition_temp.sector_end = partitions.front().sector_start -1;
@@ -1010,11 +1010,11 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 	}
 
 	//look for gaps in between
-	for  (unsigned int t =0; t < partitions.size() -1; t++)
+	for (unsigned int t =0; t < partitions.size() -1; t++)
 	{
-		if  (   ((partitions[ t + 1 ].sector_start - partitions[ t ].sector_end - 1) > (MEBIBYTE / sector_size))
-		    ||  (   (partitions[ t + 1 ].type != TYPE_LOGICAL)  // Only show exactly 1 MiB if following partition is not logical.
-		        &&  ((partitions[ t + 1 ].sector_start - partitions[ t ].sector_end - 1) == (MEBIBYTE / sector_size))
+		if ( ((partitions[ t + 1 ].sector_start - partitions[ t ].sector_end - 1) > (MEBIBYTE / sector_size))
+		    || ( (partitions[ t + 1 ].type != TYPE_LOGICAL)  // Only show exactly 1 MiB if following partition is not logical.
+		        && ((partitions[ t + 1 ].sector_start - partitions[ t ].sector_end - 1) == (MEBIBYTE / sector_size))
 		      )
 		  )
 		{
@@ -1026,7 +1026,7 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 	}
 
 	//last partition end <---> end
-	if  ((end - partitions.back().sector_end) >= (MEBIBYTE / sector_size))
+	if ((end - partitions.back().sector_end) >= (MEBIBYTE / sector_size))
 	{
 		partition_temp.sector_start = partitions.back().sector_end +1;
 		partition_temp.sector_end = end;
@@ -1037,9 +1037,9 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 
 void GParted_Core::set_mountpoints (std::vector<Partition> & partitions)
 {
-	for  (unsigned int t = 0; t < partitions.size(); t++)
+	for (unsigned int t = 0; t < partitions.size(); t++)
 	{
-		if  ((partitions[ t ].type == TYPE_PRIMARY ||
+		if ((partitions[ t ].type == TYPE_PRIMARY ||
 		       partitions[ t ].type == TYPE_LOGICAL
 		    ) &&
 		     partitions[ t ].filesystem != FS_LINUX_SWAP &&
@@ -1047,32 +1047,32 @@ void GParted_Core::set_mountpoints (std::vector<Partition> & partitions)
 		     partitions[ t ].filesystem != FS_LUKS
 		  )
 		{
-			if  (partitions[ t ].busy)
+			if (partitions[ t ].busy)
 			{
 					//Normal device, not DMRaid device
-					for  (unsigned int i = 0; i < partitions[ t ].get_paths().size(); i++)
+					for (unsigned int i = 0; i < partitions[ t ].get_paths().size(); i++)
 					{
 						iter_mp = mount_info.find (partitions[ t ].get_paths()[ i ]);
-						if  (iter_mp != mount_info.end())
+						if (iter_mp != mount_info.end())
 						{
-							partitions[ t ].add_mountpoints (iter_mp ->second);
+							partitions[ t ].add_mountpoints (iter_mp->second);
 							break;
 						}
 					}
 
-				if  (partitions[ t ].get_mountpoints().empty())
+				if (partitions[ t ].get_mountpoints().empty())
 					partitions[ t ].messages.push_back ("Unable to find mount point");
 			}
 			else
 			{
 				iter_mp = fstab_info.find (partitions[ t ].get_path());
-				if  (iter_mp != fstab_info.end())
-					partitions[ t ].add_mountpoints (iter_mp ->second);
+				if (iter_mp != fstab_info.end())
+					partitions[ t ].add_mountpoints (iter_mp->second);
 			}
 		}
-		else if  (partitions[ t ].type == TYPE_EXTENDED)
+		else if (partitions[ t ].type == TYPE_EXTENDED)
 			set_mountpoints (partitions[ t ].logicals);
-		else if  (partitions[ t ].filesystem == FS_LVM2_PV)
+		else if (partitions[ t ].filesystem == FS_LVM2_PV)
 		{
 		}
 	}
@@ -1082,21 +1082,21 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 {
 	struct statvfs sfs;
 
-	for  (unsigned int t = 0; t < partitions.size(); t++)
+	for (unsigned int t = 0; t < partitions.size(); t++)
 	{
-		if  (partitions[ t ].filesystem != FS_LINUX_SWAP &&
+		if (partitions[ t ].filesystem != FS_LINUX_SWAP &&
 		     partitions[ t ].filesystem != FS_LUKS       &&
 		     partitions[ t ].filesystem != FS_UNKNOWN
 		  )
 		{
-			if  (partitions[ t ].type == TYPE_PRIMARY ||
+			if (partitions[ t ].type == TYPE_PRIMARY ||
 			     partitions[ t ].type == TYPE_LOGICAL)
 			{
-				if  (partitions[ t ].busy && partitions[t].filesystem != FS_LVM2_PV)
+				if (partitions[ t ].busy && partitions[t].filesystem != FS_LVM2_PV)
 				{
-					if  (partitions[ t ].get_mountpoints().size() > 0 )
+					if (partitions[ t ].get_mountpoints().size() > 0 )
 					{
-						if  (statvfs (partitions[ t ].get_mountpoint().c_str(), &sfs) == 0)
+						if (statvfs (partitions[ t ].get_mountpoint().c_str(), &sfs) == 0)
 							partitions[ t ].Set_Unused (sfs.f_bfree * (sfs.f_bsize / partitions[ t ].sector_size));
 						else
 							partitions[ t ].messages.push_back(
@@ -1111,8 +1111,8 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 					switch (get_fs (partitions[ t ].filesystem).read)
 					{
 						case FS::EXTERNAL	:
-							if  (set_proper_filesystem (partitions[ t ].filesystem))
-								p_filesystem ->set_used_sectors (partitions[ t ]);
+							if (set_proper_filesystem (partitions[ t ].filesystem))
+								p_filesystem->set_used_sectors (partitions[ t ]);
 							break;
 
 						default:
@@ -1120,12 +1120,12 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 					}
 				}
 
-				if  (partitions[ t ].sectors_used == -1)
+				if (partitions[ t ].sectors_used == -1)
 				{
 					temp = "Unable to read the contents of this file system!";
 					temp += "\n";
 					temp += "Because of this some operations may be unavailable.";
-					if  (! Utils::get_filesystem_software (partitions[ t ].filesystem).empty())
+					if (! Utils::get_filesystem_software (partitions[ t ].filesystem).empty())
 					{
 						temp += "\n\n";
 						temp +=  "The cause might be a missing software package.";
@@ -1139,7 +1139,7 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 					partitions[ t ].messages.push_back (temp);
 				}
 			}
-			else if  (partitions[ t ].type == TYPE_EXTENDED)
+			else if (partitions[ t ].type == TYPE_EXTENDED)
 				set_used_sectors (partitions[ t ].logicals);
 		}
 	}
@@ -1147,21 +1147,21 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 
 void GParted_Core::set_flags (Partition & partition)
 {
-	for  (unsigned int t = 0; t < flags.size(); t++)
-		if  (ped_partition_is_flag_available (lp_partition, flags[ t ]) &&
+	for (unsigned int t = 0; t < flags.size(); t++)
+		if (ped_partition_is_flag_available (lp_partition, flags[ t ]) &&
 		     ped_partition_get_flag (lp_partition, flags[ t ]))
 			partition.flags.push_back (ped_partition_flag_get_name (flags[ t ]));
 }
 
 bool GParted_Core::create (const Device & device, Partition & new_partition, OperationDetail & operationdetail)
 {
-	if  (new_partition.type == TYPE_EXTENDED)
+	if (new_partition.type == TYPE_EXTENDED)
 	{
 		return create_partition (new_partition, operationdetail);
 	}
-	else if  (create_partition (new_partition, operationdetail, (get_fs (new_partition.filesystem).MIN / new_partition.sector_size)))
+	else if (create_partition (new_partition, operationdetail, (get_fs (new_partition.filesystem).MIN / new_partition.sector_size)))
 	{
-		if  (new_partition.filesystem == FS_UNFORMATTED)
+		if (new_partition.filesystem == FS_UNFORMATTED)
 			return true;
 		else
 			return set_partition_type (new_partition, operationdetail) &&
@@ -1206,30 +1206,30 @@ bool GParted_Core::resize_move (const Device & device,
 				Partition & partition_new,
 				OperationDetail & operationdetail)
 {
-	if  (  (partition_new.alignment == ALIGN_STRICT)
+	if ( (partition_new.alignment == ALIGN_STRICT)
 	    || (partition_new.alignment == ALIGN_MEBIBYTE)
 	    || partition_new.strict_start
 	    || calculate_exact_geom (partition_old, partition_new, operationdetail)
 	  )
 	{
-		if  (partition_old.type == TYPE_EXTENDED)
+		if (partition_old.type == TYPE_EXTENDED)
 			return resize_move_partition (partition_old, partition_new, operationdetail);
 
-		if  (partition_new.sector_start == partition_old.sector_start)
+		if (partition_new.sector_start == partition_old.sector_start)
 			return resize (partition_old, partition_new, operationdetail);
 
-		if  (partition_new.get_sector_length() == partition_old.get_sector_length())
+		if (partition_new.get_sector_length() == partition_old.get_sector_length())
 			return move (device, partition_old, partition_new, operationdetail);
 
 		Partition temp;
-		if  (partition_new.get_sector_length() > partition_old.get_sector_length())
+		if (partition_new.get_sector_length() > partition_old.get_sector_length())
 		{
 			//first move, then grow. Since old.length < new.length and new.start is valid, temp is valid.
 			temp = partition_new;
 			temp.sector_end = temp.sector_start + partition_old.get_sector_length() -1;
 		}
 
-		if  (partition_new.get_sector_length() < partition_old.get_sector_length())
+		if (partition_new.get_sector_length() < partition_old.get_sector_length())
 		{
 			//first shrink, then move. Since new.length < old.length and old.start is valid, temp is valid.
 			temp = partition_old;
@@ -1238,10 +1238,10 @@ bool GParted_Core::resize_move (const Device & device,
 
 		PartitionAlignment previous_alignment = temp.alignment;
 		temp.alignment = ALIGN_STRICT;
-		bool succes = resize_move (device, partition_old, temp, operationdetail);
+		bool success = resize_move (device, partition_old, temp, operationdetail);
 		temp.alignment = previous_alignment;
 
-		return succes && resize_move (device, temp, partition_new, operationdetail);
+		return success && resize_move (device, temp, partition_new, operationdetail);
 	}
 
 	return false;
@@ -1399,8 +1399,8 @@ bool GParted_Core::copy_block (PedDevice * lp_device_src,
 			       Glib::ustring & error_message,
 			       bool readonly)
 {
-	Byte_Value sector_size_src = lp_device_src ->sector_size;
-	Byte_Value sector_size_dst = lp_device_dst ->sector_size;
+	Byte_Value sector_size_src = lp_device_src->sector_size;
+	Byte_Value sector_size_dst = lp_device_dst->sector_size;
 
 	//Handle case where src and dst sector sizes are different.
 	//    E.g.,  5 sectors x 512 bytes/sector = ??? 2048 byte sectors
@@ -1409,19 +1409,19 @@ bool GParted_Core::copy_block (PedDevice * lp_device_src,
 
 	//Handle situation where we are performing copy operation beginning
 	//  with the end of the partition and finishing with the start.
-	if  (block_length < 0)
+	if (block_length < 0)
 	{
 		block_length = llabs (block_length);
-		offset_src -=  ((block_length / sector_size_src) - 1);
+		offset_src -= ((block_length / sector_size_src) - 1);
 		/* Handle situation where src sector size is smaller than dst sector size and an additional partial dst sector is required. */
-		offset_dst -=  (((block_length + (sector_size_dst - 1)) / sector_size_dst) - 1);
+		offset_dst -= (((block_length + (sector_size_dst - 1)) / sector_size_dst) - 1);
 	}
 
-	if  (block_length != 0)
+	if (block_length != 0)
 	{
-		if  (ped_device_read (lp_device_src, buf, offset_src, num_blocks_src))
+		if (ped_device_read (lp_device_src, buf, offset_src, num_blocks_src))
 		{
-			if  (readonly || ped_device_write (lp_device_dst, buf, offset_dst, num_blocks_dst))
+			if (readonly || ped_device_write (lp_device_dst, buf, offset_dst, num_blocks_dst))
 				return true;
 			else
 				error_message = String::ucompose ("Error while writing block at sector %1", offset_dst);
@@ -1454,7 +1454,7 @@ bool GParted_Core::set_proper_filesystem (const FILESYSTEM & filesystem)
 
 FileSystem * GParted_Core::get_filesystem_object (const FILESYSTEM & filesystem)
 {
-	if  (FILESYSTEM_MAP.count (filesystem))
+	if (FILESYSTEM_MAP.count (filesystem))
 	    return FILESYSTEM_MAP[ filesystem ];
 	else
 	    return NULL;
@@ -1477,13 +1477,13 @@ bool GParted_Core::open_device_and_disk (const Glib::ustring & device_path, bool
 	lp_device = NULL;
 	lp_disk = NULL;
 
-	if  (open_device (device_path))
+	if (open_device (device_path))
 	{
 		lp_disk = ped_disk_new (lp_device);
 
 		//if ! disk and writeable it's probably a HD without disklabel.
 		//We return true here and deal with them in GParted_Core::get_devices
-		if  (lp_disk ||  (! strict && ! lp_device ->read_only))
+		if (lp_disk || (! strict && ! lp_device->read_only))
 			return true;
 
 		close_device_and_disk();
@@ -1494,7 +1494,7 @@ bool GParted_Core::open_device_and_disk (const Glib::ustring & device_path, bool
 
 void GParted_Core::close_disk()
 {
-	if  (lp_disk)
+	if (lp_disk)
 		ped_disk_destroy (lp_disk);
 
 	lp_disk = NULL;
@@ -1504,7 +1504,7 @@ void GParted_Core::close_device_and_disk()
 {
 	close_disk();
 
-	if  (lp_device)
+	if (lp_device)
 		ped_device_destroy (lp_device);
 
 	lp_device = NULL;
@@ -1512,28 +1512,28 @@ void GParted_Core::close_device_and_disk()
 
 bool GParted_Core::commit()
 {
-	bool succes = ped_disk_commit_to_dev (lp_disk);
+	bool success = ped_disk_commit_to_dev (lp_disk);
 
-	succes = commit_to_os (10) && succes;
+	success = commit_to_os (10) && success;
 
-	return succes;
+	return success;
 }
 
 bool GParted_Core::commit_to_os (std::time_t timeout)
 {
-	bool succes;
-		succes = ped_disk_commit_to_os (lp_disk);
+	bool success;
+		success = ped_disk_commit_to_os (lp_disk);
 
 	settle_device (timeout);
 
-	return succes;
+	return success;
 }
 
 void GParted_Core::settle_device (std::time_t timeout)
 {
-	if  (! Glib::find_program_in_path ("udevsettle").empty())
+	if (! Glib::find_program_in_path ("udevsettle").empty())
 		Utils::execute_command ("udevsettle --timeout=" + Utils::num_to_str (timeout));
-	else if  (! Glib::find_program_in_path ("udevadm").empty())
+	else if (! Glib::find_program_in_path ("udevadm").empty())
 		Utils::execute_command ("udevadm settle --timeout=" + Utils::num_to_str (timeout));
 	else
 		sleep (timeout);
@@ -1542,7 +1542,7 @@ void GParted_Core::settle_device (std::time_t timeout)
 PedExceptionOption GParted_Core::ped_exception_handler (PedException * e)
 {
 	PedExceptionOption ret = PED_EXCEPTION_UNHANDLED;
-        std::cout << e ->message << std::endl;
+        std::cout << e->message << std::endl;
 
         libparted_messages.push_back (e->message);
 	char optcount = 0;

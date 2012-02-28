@@ -18,7 +18,7 @@ void Device::Reset()
 
 void Device::add_path (const Glib::ustring & path, bool clear_paths)
 {
-	if  (clear_paths)
+	if (clear_paths)
 		paths.clear();
 
 	paths.push_back (path);
@@ -28,17 +28,17 @@ void Device::add_path (const Glib::ustring & path, bool clear_paths)
 
 void Device::add_paths (const std::vector<Glib::ustring> & paths, bool clear_paths)
 {
-	if  (clear_paths)
-		this ->paths.clear();
+	if (clear_paths)
+		this->paths.clear();
 
-	this ->paths.insert (this ->paths.end(), paths.begin(), paths.end());
+	this->paths.insert (this->paths.end(), paths.begin(), paths.end());
 
 	sort_paths_and_remove_duplicates();
 }
 
 Glib::ustring Device::get_path() const
 {
-	if  (paths.size() > 0)
+	if (paths.size() > 0)
 		return paths.front();
 
 	return "";
@@ -51,12 +51,12 @@ std::vector<Glib::ustring> Device::get_paths() const
 
 bool Device::operator== (const Device & device) const
 {
-	return this ->get_path() == device.get_path();
+	return this->get_path() == device.get_path();
 }
 
 bool Device::operator!= (const Device & device) const
 {
-	return !  (*this == device);
+	return ! (*this == device);
 }
 
 void Device::sort_paths_and_remove_duplicates()
