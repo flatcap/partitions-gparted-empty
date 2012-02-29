@@ -1,5 +1,8 @@
 #include "treeview_detail.h"
 
+/**
+ * TreeView_Detail
+ */
 TreeView_Detail::TreeView_Detail()
 {
 	block = false;
@@ -63,6 +66,9 @@ TreeView_Detail::TreeView_Detail()
 	}
 }
 
+/**
+ * load_partitions
+ */
 void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions)
 {
 	bool mountpoints = false, labels = false;
@@ -77,6 +83,9 @@ void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions
 	expand_all();
 }
 
+/**
+ * set_selected
+ */
 void TreeView_Detail::set_selected (const Partition & partition)
 {
 	block = true;
@@ -84,11 +93,17 @@ void TreeView_Detail::set_selected (const Partition & partition)
 	block = false;
 }
 
+/**
+ * clear
+ */
 void TreeView_Detail::clear()
 {
 	treestore_detail->clear();
 }
 
+/**
+ * load_partitions
+ */
 void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions,
 				       bool & mountpoints,
 				       bool & labels,
@@ -111,6 +126,9 @@ void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions
 	}
 }
 
+/**
+ * set_selected
+ */
 bool TreeView_Detail::set_selected (Gtk::TreeModel::Children rows, const Partition & partition, bool inside_extended)
 {
 	for (unsigned int t = 0; t < rows.size(); t++)
@@ -131,6 +149,9 @@ bool TreeView_Detail::set_selected (Gtk::TreeModel::Children rows, const Partiti
 	return false;
 }
 
+/**
+ * create_row
+ */
 void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition & partition)
 {
 	if (partition.busy)
@@ -183,6 +204,9 @@ void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition 
 	treerow[ treeview_detail_columns.partition ] = partition;
 }
 
+/**
+ * on_button_press_event
+ */
 bool TreeView_Detail::on_button_press_event (GdkEventButton * event)
 {
 	//Call base class, to allow normal handling,
@@ -195,6 +219,9 @@ bool TreeView_Detail::on_button_press_event (GdkEventButton * event)
 	return handled;
 }
 
+/**
+ * on_row_activated
+ */
 void TreeView_Detail::on_row_activated (const Gtk::TreeModel::Path & path, Gtk::TreeViewColumn * column)
 {
 	//Call base class, to allow normal handling,
@@ -203,6 +230,9 @@ void TreeView_Detail::on_row_activated (const Gtk::TreeModel::Path & path, Gtk::
 	signal_partition_activated.emit();
 }
 
+/**
+ * on_selection_changed
+ */
 void TreeView_Detail::on_selection_changed()
 {
 	if (! block && treeselection->get_selected() != 0)

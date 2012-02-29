@@ -5,6 +5,9 @@
 #include <gtkmm/radiobuttongroup.h>
 #include <gtkmm/main.h>
 
+/**
+ * Win_GParted
+ */
 Win_GParted::Win_GParted (const std::vector<Glib::ustring> & user_devices)
 {
 	copied_partition.Reset();
@@ -91,6 +94,9 @@ Win_GParted::Win_GParted (const std::vector<Glib::ustring> & user_devices)
 	hpaned_main.get_child1()->hide();
 }
 
+/**
+ * init_menubar
+ */
 void Win_GParted::init_menubar()
 {
 	//fill menubar_main and connect callbacks
@@ -170,6 +176,9 @@ void Win_GParted::init_menubar()
 	menubar_main.items().push_back (Gtk::Menu_Helpers::MenuElem("_Help", *menu));
 }
 
+/**
+ * init_toolbar
+ */
 void Win_GParted::init_toolbar()
 {
 	int index = 0;
@@ -260,6 +269,9 @@ void Win_GParted::init_toolbar()
 	hbox_toolbar.pack_start (combo_devices, Gtk::PACK_SHRINK);
 }
 
+/**
+ * init_partition_menu
+ */
 void Win_GParted::init_partition_menu()
 {
 	int index = 0;
@@ -361,6 +373,9 @@ void Win_GParted::init_partition_menu()
 	menu_partition.accelerate (*this);
 }
 
+/**
+ * create_format_menu
+ */
 Gtk::Menu * Win_GParted::create_format_menu()
 {
 	menu = manage (new Gtk::Menu());
@@ -401,6 +416,9 @@ Gtk::Menu * Win_GParted::create_format_menu()
 	return menu;
 }
 
+/**
+ * init_device_info
+ */
 void Win_GParted::init_device_info()
 {
 	vbox_info.set_spacing (5);
@@ -503,6 +521,9 @@ void Win_GParted::init_device_info()
 	vbox_info.pack_start (*table, Gtk::PACK_SHRINK);
 }
 
+/**
+ * init_hpaned_main
+ */
 void Win_GParted::init_hpaned_main()
 {
 	//left scrollwindow (holds device info)
@@ -526,6 +547,9 @@ void Win_GParted::init_hpaned_main()
 	hpaned_main.pack2 (*scrollwindow, true, true);
 }
 
+/**
+ * refresh_combo_devices
+ */
 void Win_GParted::refresh_combo_devices()
 {
 	liststore_devices->clear();
@@ -567,6 +591,9 @@ void Win_GParted::refresh_combo_devices()
 	combo_devices.set_active (current_device);
 }
 
+/**
+ * show_pulsebar
+ */
 void Win_GParted::show_pulsebar (const Glib::ustring & status_message)
 {
 	pulsebar.show();
@@ -608,6 +635,9 @@ void Win_GParted::show_pulsebar (const Glib::ustring & status_message)
 	drawingarea_visualdisk.set_sensitive (true);
 }
 
+/**
+ * Fill_Label_Device_Info
+ */
 void Win_GParted::Fill_Label_Device_Info (bool clear)
 {
 	if (clear)
@@ -633,11 +663,17 @@ void Win_GParted::Fill_Label_Device_Info (bool clear)
 	}
 }
 
+/**
+ * on_delete_event
+ */
 bool Win_GParted::on_delete_event (GdkEventAny *event)
 {
 	return ! Quit_Check_Operations();
 }
 
+/**
+ * Add_Operation
+ */
 void Win_GParted::Add_Operation (Operation * operation, int index)
 {
 	if (operation)
@@ -690,6 +726,9 @@ void Win_GParted::Add_Operation (Operation * operation, int index)
 	}
 }
 
+/**
+ * Merge_Operations
+ */
 bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 {
 	if (first >= operations.size() || second >= operations.size())
@@ -770,6 +809,9 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 	return false;
 }
 
+/**
+ * Refresh_Visual
+ */
 void Win_GParted::Refresh_Visual()
 {
 	std::vector<Partition> partitions = devices[ current_device ].partitions;
@@ -831,6 +873,9 @@ void Win_GParted::Refresh_Visual()
 		Gtk::Main::iteration();
 }
 
+/**
+ * Quit_Check_Operations
+ */
 bool Win_GParted::Quit_Check_Operations()
 {
 	if (operations.size())
@@ -859,6 +904,9 @@ bool Win_GParted::Quit_Check_Operations()
 	return true; //close GParted
 }
 
+/**
+ * set_valid_operations
+ */
 void Win_GParted::set_valid_operations()
 {
 	allow_new (false); allow_delete (false); allow_resize (false); allow_copy (false);
@@ -1045,6 +1093,9 @@ void Win_GParted::set_valid_operations()
 	}
 }
 
+/**
+ * open_operationslist
+ */
 void Win_GParted::open_operationslist()
 {
 	if (! OPERATIONSLIST_OPEN)
@@ -1064,6 +1115,9 @@ void Win_GParted::open_operationslist()
 	}
 }
 
+/**
+ * close_operationslist
+ */
 void Win_GParted::close_operationslist()
 {
 	if (OPERATIONSLIST_OPEN)
@@ -1085,6 +1139,9 @@ void Win_GParted::close_operationslist()
 	}
 }
 
+/**
+ * clear_operationslist
+ */
 void Win_GParted::clear_operationslist()
 {
 	remove_operation (-1, true);
@@ -1093,6 +1150,9 @@ void Win_GParted::clear_operationslist()
 	Refresh_Visual();
 }
 
+/**
+ * combo_devices_changed
+ */
 void Win_GParted::combo_devices_changed()
 {
 	unsigned int old_current_device = current_device;
@@ -1117,6 +1177,9 @@ void Win_GParted::combo_devices_changed()
 			items()[ current_device ])->set_active (true);
 }
 
+/**
+ * radio_devices_changed
+ */
 void Win_GParted::radio_devices_changed (unsigned int item)
 {
 	if (static_cast<Gtk::RadioMenuItem *>(
@@ -1127,6 +1190,9 @@ void Win_GParted::radio_devices_changed (unsigned int item)
 	}
 }
 
+/**
+ * on_show
+ */
 void Win_GParted::on_show()
 {
 	Gtk::Window::on_show();
@@ -1137,12 +1203,18 @@ void Win_GParted::on_show()
 	menu_gparted_refresh_devices();
 }
 
+/**
+ * thread_refresh_devices
+ */
 void Win_GParted::thread_refresh_devices()
 {
 	gparted_core.set_devices (devices);
 	pulse = false;
 }
 
+/**
+ * menu_gparted_refresh_devices
+ */
 void Win_GParted::menu_gparted_refresh_devices()
 {
 	pulse = true;
@@ -1213,20 +1285,32 @@ void Win_GParted::menu_gparted_refresh_devices()
 	}
 }
 
+/**
+ * menu_gparted_features
+ */
 void Win_GParted::menu_gparted_features()
 {
 }
 
+/**
+ * menu_gparted_quit
+ */
 void Win_GParted::menu_gparted_quit()
 {
 	if (Quit_Check_Operations())
 		this->hide();
 }
 
+/**
+ * menu_view_harddisk_info
+ */
 void Win_GParted::menu_view_harddisk_info()
 {
 }
 
+/**
+ * menu_view_operations
+ */
 void Win_GParted::menu_view_operations()
 {
 	if (static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 2 ].get_submenu()->items()[ 1 ])->get_active())
@@ -1235,24 +1319,39 @@ void Win_GParted::menu_view_operations()
 		close_operationslist();
 }
 
+/**
+ * show_disklabel_unrecognized
+ */
 void Win_GParted::show_disklabel_unrecognized (Glib::ustring device_name)
 {
 }
 
+/**
+ * show_help_dialog
+ */
 void Win_GParted::show_help_dialog (const Glib::ustring & filename /* E.g., gparted */
                                   , const Glib::ustring & link_id  /* For context sensitive help */
                                  )
 {
 }
 
+/**
+ * menu_help_contents
+ */
 void Win_GParted::menu_help_contents()
 {
 }
 
+/**
+ * menu_help_about
+ */
 void Win_GParted::menu_help_about()
 {
 }
 
+/**
+ * on_partition_selected
+ */
 void Win_GParted::on_partition_selected (const Partition & partition, bool src_is_treeview)
 {
 	selected_partition = partition;
@@ -1265,62 +1364,104 @@ void Win_GParted::on_partition_selected (const Partition & partition, bool src_i
 		treeview_detail.set_selected (partition);
 }
 
+/**
+ * on_partition_activated
+ */
 void Win_GParted::on_partition_activated()
 {
 	activate_info();
 }
 
+/**
+ * on_partition_popup_menu
+ */
 void Win_GParted::on_partition_popup_menu (unsigned int button, unsigned int time)
 {
 	menu_partition.popup (button, time);
 }
 
+/**
+ * max_amount_prim_reached
+ */
 bool Win_GParted::max_amount_prim_reached()
 {
 	return false;
 }
 
+/**
+ * activate_resize
+ */
 void Win_GParted::activate_resize()
 {
 }
 
+/**
+ * activate_copy
+ */
 void Win_GParted::activate_copy()
 {
 	copied_partition = selected_partition;
 }
 
+/**
+ * activate_paste
+ */
 void Win_GParted::activate_paste()
 {
 }
 
+/**
+ * activate_new
+ */
 void Win_GParted::activate_new()
 {
 }
 
+/**
+ * activate_delete
+ */
 void Win_GParted::activate_delete()
 {
 }
 
+/**
+ * activate_info
+ */
 void Win_GParted::activate_info()
 {
 }
 
+/**
+ * activate_format
+ */
 void Win_GParted::activate_format (FILESYSTEM new_fs)
 {
 }
 
+/**
+ * thread_unmount_partition
+ */
 void Win_GParted::thread_unmount_partition (bool * success, Glib::ustring * error)
 {
 }
 
+/**
+ * thread_mount_partition
+ */
 void Win_GParted::thread_mount_partition (Glib::ustring mountpoint, bool * success, Glib::ustring * error)
 {
 }
 
+/**
+ * thread_toggle_swap
+ */
 void Win_GParted::thread_toggle_swap (bool * success, Glib::ustring * error)
 {
 }
 
+/**
+ * thread_guess_partition_table
+ */
 void Win_GParted::thread_guess_partition_table()
 {
 	this->gpart_output="";
@@ -1328,42 +1469,72 @@ void Win_GParted::thread_guess_partition_table()
 	pulse=false;
 }
 
+/**
+ * toggle_swap_mount_state
+ */
 void Win_GParted::toggle_swap_mount_state()
 {
 }
 
+/**
+ * activate_mount_partition
+ */
 void Win_GParted::activate_mount_partition (unsigned int index)
 {
 }
 
+/**
+ * activate_disklabel
+ */
 void Win_GParted::activate_disklabel()
 {
 }
 
+/**
+ * activate_attempt_rescue_data
+ */
 void Win_GParted::activate_attempt_rescue_data()
 {
 }
 
+/**
+ * activate_manage_flags
+ */
 void Win_GParted::activate_manage_flags()
 {
 }
 
+/**
+ * activate_check
+ */
 void Win_GParted::activate_check()
 {
 }
 
+/**
+ * activate_label_partition
+ */
 void Win_GParted::activate_label_partition()
 {
 }
 
+/**
+ * activate_change_uuid
+ */
 void Win_GParted::activate_change_uuid()
 {
 }
 
+/**
+ * activate_undo
+ */
 void Win_GParted::activate_undo()
 {
 }
 
+/**
+ * remove_operation
+ */
 void Win_GParted::remove_operation (int index, bool remove_all)
 {
 	if (remove_all)
@@ -1385,6 +1556,9 @@ void Win_GParted::remove_operation (int index, bool remove_all)
 	}
 }
 
+/**
+ * partition_in_operation_queue_count
+ */
 int Win_GParted::partition_in_operation_queue_count (const Partition & partition)
 {
 	int operation_count = 0;
@@ -1398,6 +1572,9 @@ int Win_GParted::partition_in_operation_queue_count (const Partition & partition
 	return operation_count;
 }
 
+/**
+ * active_partitions_on_device_count
+ */
 int  Win_GParted::active_partitions_on_device_count (const Device & device)
 {
 	int active_count = 0;
@@ -1432,6 +1609,9 @@ int  Win_GParted::active_partitions_on_device_count (const Device & device)
 	return active_count;
 }
 
+/**
+ * activate_apply
+ */
 void Win_GParted::activate_apply()
 {
 }

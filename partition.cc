@@ -1,10 +1,16 @@
 #include "partition.h"
 
+/**
+ * Partition
+ */
 Partition::Partition()
 {
 	Reset();
 }
 
+/**
+ * Partition
+ */
 Partition::Partition (const Glib::ustring & path)
 {
 	Reset();
@@ -12,6 +18,9 @@ Partition::Partition (const Glib::ustring & path)
 	paths.push_back (path);
 }
 
+/**
+ * Reset
+ */
 void Partition::Reset()
 {
 	paths.clear();
@@ -31,6 +40,9 @@ void Partition::Reset()
 	mountpoints.clear();
 }
 
+/**
+ * Set
+ */
 void Partition::Set(	const Glib::ustring & device_path,
 			const Glib::ustring & partition,
 			int partition_number,
@@ -58,6 +70,9 @@ void Partition::Set(	const Glib::ustring & device_path,
 	this->color.set (Utils::get_color (filesystem));
 }
 
+/**
+ * Set_Unused
+ */
 void Partition::Set_Unused (Sector sectors_unused)
 {
 	if (sectors_unused <= get_sector_length())
@@ -67,6 +82,9 @@ void Partition::Set_Unused (Sector sectors_unused)
 	}
 }
 
+/**
+ * set_used
+ */
 void Partition::set_used (Sector sectors_used)
 {
 	if (sectors_used < get_sector_length())
@@ -76,6 +94,9 @@ void Partition::set_used (Sector sectors_used)
 	}
 }
 
+/**
+ * Set_Unallocated
+ */
 void Partition::Set_Unallocated (const Glib::ustring & device_path,
 				 Sector sector_start,
 				 Sector sector_end,
@@ -98,6 +119,9 @@ void Partition::Set_Unallocated (const Glib::ustring & device_path,
 	status = STAT_REAL;
 }
 
+/**
+ * Update_Number
+ */
 void Partition::Update_Number (int new_number)
 {
 	unsigned int index;
@@ -114,6 +138,9 @@ void Partition::Update_Number (int new_number)
 	partition_number = new_number;
 }
 
+/**
+ * add_path
+ */
 void Partition::add_path (const Glib::ustring & path, bool clear_paths)
 {
 	if (clear_paths)
@@ -124,6 +151,9 @@ void Partition::add_path (const Glib::ustring & path, bool clear_paths)
 	sort_paths_and_remove_duplicates();
 }
 
+/**
+ * add_paths
+ */
 void Partition::add_paths (const std::vector<Glib::ustring> & paths, bool clear_paths)
 {
 	if (clear_paths)
@@ -134,6 +164,9 @@ void Partition::add_paths (const std::vector<Glib::ustring> & paths, bool clear_
 	sort_paths_and_remove_duplicates();
 }
 
+/**
+ * get_byte_length
+ */
 Byte_Value Partition::get_byte_length() const
 {
 	if (get_sector_length() >= 0)
@@ -142,6 +175,9 @@ Byte_Value Partition::get_byte_length() const
 		return -1;
 }
 
+/**
+ * get_sector_length
+ */
 Sector Partition::get_sector_length() const
 {
 	if (sector_start >= 0 && sector_end >= 0)
@@ -150,6 +186,9 @@ Sector Partition::get_sector_length() const
 		return -1;
 }
 
+/**
+ * get_path
+ */
 Glib::ustring Partition::get_path() const
 {
 	if (paths.size() > 0)
@@ -158,11 +197,17 @@ Glib::ustring Partition::get_path() const
 	return "";
 }
 
+/**
+ * get_paths
+ */
 std::vector<Glib::ustring> Partition::get_paths() const
 {
 	return paths;
 }
 
+/**
+ * operator==
+ */
 bool Partition::operator== (const Partition & partition) const
 {
 	return device_path == partition.device_path &&
@@ -171,11 +216,17 @@ bool Partition::operator== (const Partition & partition) const
 	       type == partition.type;
 }
 
+/**
+ * operator!=
+ */
 bool Partition::operator!= (const Partition & partition) const
 {
 	return ! (*this == partition);
 }
 
+/**
+ * sort_paths_and_remove_duplicates
+ */
 void Partition::sort_paths_and_remove_duplicates()
 {
 	//remove duplicates
@@ -186,6 +237,9 @@ void Partition::sort_paths_and_remove_duplicates()
 	std::sort (paths.begin(), paths.end(), compare_paths);
 }
 
+/**
+ * add_mountpoint
+ */
 void Partition::add_mountpoint (const Glib::ustring & mountpoint, bool clear_mountpoints)
 {
 	if (clear_mountpoints)
@@ -194,6 +248,9 @@ void Partition::add_mountpoint (const Glib::ustring & mountpoint, bool clear_mou
 	this->mountpoints.push_back (mountpoint);
 }
 
+/**
+ * add_mountpoints
+ */
 void Partition::add_mountpoints (const std::vector<Glib::ustring> & mountpoints, bool clear_mountpoints)
 {
 	if (clear_mountpoints)
@@ -202,6 +259,9 @@ void Partition::add_mountpoints (const std::vector<Glib::ustring> & mountpoints,
 	this->mountpoints.insert (this->mountpoints.end(), mountpoints.begin(), mountpoints.end());
 }
 
+/**
+ * get_mountpoint
+ */
 Glib::ustring Partition::get_mountpoint() const
 {
 	if (mountpoints.size() > 0)
@@ -210,16 +270,25 @@ Glib::ustring Partition::get_mountpoint() const
 	return "";
 }
 
+/**
+ * get_mountpoints
+ */
 std::vector<Glib::ustring> Partition::get_mountpoints() const
 {
 	return mountpoints;
 }
 
+/**
+ * get_sector
+ */
 Sector Partition::get_sector() const
 {
 	return (sector_start + sector_end) / 2;
 }
 
+/**
+ * test_overlap
+ */
 bool Partition::test_overlap (const Partition & partition) const
 {
 	return ((partition.sector_start >= sector_start && partition.sector_start <= sector_end)
@@ -229,16 +298,25 @@ bool Partition::test_overlap (const Partition & partition) const
 		 (partition.sector_start < sector_start && partition.sector_end > sector_end));
 }
 
+/**
+ * clear_mountpoints
+ */
 void Partition::clear_mountpoints()
 {
 	mountpoints.clear();
 }
 
+/**
+ * compare_paths
+ */
 bool Partition::compare_paths (const Glib::ustring & A, const Glib::ustring & B)
 {
 	return A.length() < B.length();
 }
 
+/**
+ * ~Partition
+ */
 Partition::~Partition()
 {
 }

@@ -5,6 +5,9 @@
 #define SEP 4
 #define HEIGHT 70 + 2 * MAIN_BORDER
 
+/**
+ * DrawingAreaVisualDisk
+ */
 DrawingAreaVisualDisk::DrawingAreaVisualDisk()
 {
 	selected_vp = NULL;
@@ -24,6 +27,9 @@ DrawingAreaVisualDisk::DrawingAreaVisualDisk()
 	set_size_request (-1, HEIGHT);
 }
 
+/**
+ * load_partitions
+ */
 void DrawingAreaVisualDisk::load_partitions (const std::vector<Partition> & partitions, Sector device_length)
 {
 	clear();
@@ -34,6 +40,9 @@ void DrawingAreaVisualDisk::load_partitions (const std::vector<Partition> & part
 	queue_resize();
 }
 
+/**
+ * set_selected
+ */
 void DrawingAreaVisualDisk::set_selected (const Partition & partition)
 {
 	selected_vp = NULL;
@@ -42,6 +51,9 @@ void DrawingAreaVisualDisk::set_selected (const Partition & partition)
 	queue_draw();
 }
 
+/**
+ * clear
+ */
 void DrawingAreaVisualDisk::clear()
 {
 	free_colors (visual_partitions);
@@ -51,6 +63,9 @@ void DrawingAreaVisualDisk::clear()
 	queue_resize();
 }
 
+/**
+ * get_total_separator_px
+ */
 int DrawingAreaVisualDisk::get_total_separator_px (const std::vector<Partition> & partitions)
 {
 	for (unsigned int t = 0; t < partitions.size(); t++)
@@ -60,6 +75,9 @@ int DrawingAreaVisualDisk::get_total_separator_px (const std::vector<Partition> 
 	return (partitions.size() -1) * SEP;
 }
 
+/**
+ * set_static_data
+ */
 void DrawingAreaVisualDisk::set_static_data (const std::vector<Partition> & partitions,
 					     std::vector<visual_partition> & visual_partitions,
 					     Sector length)
@@ -90,6 +108,9 @@ void DrawingAreaVisualDisk::set_static_data (const std::vector<Partition> & part
 	}
 }
 
+/**
+ * calc_length
+ */
 int DrawingAreaVisualDisk::calc_length (std::vector<visual_partition> & visual_partitions, int length_px)
 {
 	int calced_length = 0;
@@ -111,6 +132,9 @@ int DrawingAreaVisualDisk::calc_length (std::vector<visual_partition> & visual_p
 	return calced_length + (visual_partitions.size() - 1) * SEP;
 }
 
+/**
+ * calc_position_and_height
+ */
 void DrawingAreaVisualDisk::calc_position_and_height (std::vector<visual_partition> & visual_partitions,
 						      int start,
 						      int border)
@@ -130,6 +154,9 @@ void DrawingAreaVisualDisk::calc_position_and_height (std::vector<visual_partiti
 	}
 }
 
+/**
+ * calc_used_unused
+ */
 void DrawingAreaVisualDisk::calc_used_unused (std::vector<visual_partition> & visual_partitions)
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
@@ -159,6 +186,9 @@ void DrawingAreaVisualDisk::calc_used_unused (std::vector<visual_partition> & vi
 	}
 }
 
+/**
+ * calc_text
+ */
 void DrawingAreaVisualDisk::calc_text (std::vector<visual_partition> & visual_partitions)
 {
 	int length, height;
@@ -186,6 +216,9 @@ void DrawingAreaVisualDisk::calc_text (std::vector<visual_partition> & visual_pa
 	}
 }
 
+/**
+ * draw_partition
+ */
 void DrawingAreaVisualDisk::draw_partition (const visual_partition & vp)
 {
 	//partition...
@@ -232,6 +265,9 @@ void DrawingAreaVisualDisk::draw_partition (const visual_partition & vp)
 	}
 }
 
+/**
+ * draw_partitions
+ */
 void DrawingAreaVisualDisk::draw_partitions (const std::vector<visual_partition> & visual_partitions)
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
@@ -243,6 +279,9 @@ void DrawingAreaVisualDisk::draw_partitions (const std::vector<visual_partition>
 	}
 }
 
+/**
+ * set_selected
+ */
 void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & visual_partitions, int x, int y)
 {
 	for (unsigned int t = 0; t < visual_partitions.size() && ! selected_vp; t++)
@@ -261,6 +300,9 @@ void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & 
 	}
 }
 
+/**
+ * set_selected
+ */
 void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & visual_partitions,
 					  const Partition & partition)
 {
@@ -274,6 +316,9 @@ void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & 
 	}
 }
 
+/**
+ * on_realize
+ */
 void DrawingAreaVisualDisk::on_realize()
 {
 	Gtk::DrawingArea::on_realize();
@@ -285,6 +330,9 @@ void DrawingAreaVisualDisk::on_realize()
 				  Gdk::JOIN_MITER);
 }
 
+/**
+ * on_expose_event
+ */
 bool DrawingAreaVisualDisk::on_expose_event (GdkEventExpose * event)
 {
 	bool ret_val = Gtk::DrawingArea::on_expose_event (event);
@@ -306,6 +354,9 @@ bool DrawingAreaVisualDisk::on_expose_event (GdkEventExpose * event)
 	return ret_val;
 }
 
+/**
+ * on_button_press_event
+ */
 bool DrawingAreaVisualDisk::on_button_press_event (GdkEventButton * event)
 {
 	bool ret_val = Gtk::DrawingArea::on_button_press_event (event);
@@ -327,6 +378,9 @@ bool DrawingAreaVisualDisk::on_button_press_event (GdkEventButton * event)
 	return ret_val;
 }
 
+/**
+ * on_size_allocate
+ */
 void DrawingAreaVisualDisk::on_size_allocate (Gtk::Allocation & allocation)
 {
 	Gtk::DrawingArea::on_size_allocate (allocation);
@@ -368,6 +422,9 @@ void DrawingAreaVisualDisk::on_size_allocate (Gtk::Allocation & allocation)
 	queue_draw();
 }
 
+/**
+ * spreadout_leftover_px
+ */
 int DrawingAreaVisualDisk::spreadout_leftover_px (std::vector<visual_partition> & visual_partitions, int pixels)
 {
 	int extended = -1;
@@ -391,6 +448,9 @@ int DrawingAreaVisualDisk::spreadout_leftover_px (std::vector<visual_partition> 
 	return pixels;
 }
 
+/**
+ * free_colors
+ */
 void DrawingAreaVisualDisk::free_colors (std::vector<visual_partition> & visual_partitions)
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
@@ -402,6 +462,9 @@ void DrawingAreaVisualDisk::free_colors (std::vector<visual_partition> & visual_
 	}
 }
 
+/**
+ * ~DrawingAreaVisualDisk
+ */
 DrawingAreaVisualDisk::~DrawingAreaVisualDisk()
 {
 	clear();

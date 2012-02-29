@@ -7,6 +7,9 @@ bool Proc_Partitions_Info::proc_partitions_info_cache_initialized = false;
 std::vector<Glib::ustring> Proc_Partitions_Info::device_paths_cache;
 std::map< Glib::ustring, Glib::ustring > Proc_Partitions_Info::alternate_paths_cache;
 
+/**
+ * Proc_Partitions_Info
+ */
 Proc_Partitions_Info::Proc_Partitions_Info()
 {
 	//Ensure that cache has been loaded at least once
@@ -17,6 +20,9 @@ Proc_Partitions_Info::Proc_Partitions_Info()
 	}
 }
 
+/**
+ * Proc_Partitions_Info
+ */
 Proc_Partitions_Info::Proc_Partitions_Info (bool do_refresh)
 {
 	//Ensure that cache has been loaded at least once
@@ -31,15 +37,24 @@ Proc_Partitions_Info::Proc_Partitions_Info (bool do_refresh)
 		load_proc_partitions_info_cache();
 }
 
+/**
+ * ~Proc_Partitions_Info
+ */
 Proc_Partitions_Info::~Proc_Partitions_Info()
 {
 }
 
+/**
+ * get_device_paths
+ */
 std::vector<Glib::ustring> Proc_Partitions_Info::get_device_paths()
 {
 	return device_paths_cache;
 }
 
+/**
+ * get_alternate_paths
+ */
 std::vector<Glib::ustring> Proc_Partitions_Info::get_alternate_paths (const Glib::ustring & path)
 {
 	std::vector<Glib::ustring> paths;
@@ -53,6 +68,10 @@ std::vector<Glib::ustring> Proc_Partitions_Info::get_alternate_paths (const Glib
 }
 
 //Private Methods
+
+/**
+ * load_proc_partitions_info_cache
+ */
 void Proc_Partitions_Info::load_proc_partitions_info_cache()
 {
 	alternate_paths_cache.clear();

@@ -4,6 +4,9 @@
 #include <gtkmm/main.h>
 #include "gparted_core.h"
 
+/**
+ * main
+ */
 int main (int argc, char *argv[])
 {
 	//initialize thread system

@@ -7,11 +7,17 @@
 #include <locale.h>
 #include <uuid/uuid.h>
 
+/**
+ * round
+ */
 Sector Utils::round (double double_value)
 {
 	 return static_cast<Sector> (double_value + 0.5);
 }
 
+/**
+ * mk_label
+ */
 Gtk::Label * Utils::mk_label (const Glib::ustring & text,
 			      bool use_markup,
 			      Gtk::AlignmentEnum x_align,
@@ -36,6 +42,9 @@ Gtk::Label * Utils::mk_label (const Glib::ustring & text,
 	return label;
 }
 
+/**
+ * num_to_str
+ */
 Glib::ustring Utils::num_to_str (Sector number)
 {
 	std::stringstream ss;
@@ -43,7 +52,10 @@ Glib::ustring Utils::num_to_str (Sector number)
 	return ss.str();
 }
 
-//use palette from http://developer.gnome.org/hig-book/2.32/design-color.html.en as a starting point.
+/**
+ * get_color
+ * use palette from http://developer.gnome.org/hig-book/2.32/design-color.html.en as a starting point.
+ */
 Glib::ustring Utils::get_color (FILESYSTEM filesystem)
 {
 	switch (filesystem)
@@ -78,6 +90,9 @@ Glib::ustring Utils::get_color (FILESYSTEM filesystem)
 	}
 }
 
+/**
+ * get_color_as_pixbuf
+ */
 Glib::RefPtr<Gdk::Pixbuf> Utils::get_color_as_pixbuf (FILESYSTEM filesystem, int width, int height)
 {
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create (Gdk::COLORSPACE_RGB, false, 8, width, height);
@@ -94,6 +109,9 @@ Glib::RefPtr<Gdk::Pixbuf> Utils::get_color_as_pixbuf (FILESYSTEM filesystem, int
 	return pixbuf;
 }
 
+/**
+ * get_filesystem_string
+ */
 Glib::ustring Utils::get_filesystem_string (FILESYSTEM filesystem)
 {
 	switch (filesystem)
@@ -145,6 +163,9 @@ Glib::ustring Utils::get_filesystem_string (FILESYSTEM filesystem)
 	}
 }
 
+/**
+ * get_filesystem_software
+ */
 Glib::ustring Utils::get_filesystem_software (FILESYSTEM filesystem)
 {
 	switch (filesystem)
@@ -171,7 +192,10 @@ Glib::ustring Utils::get_filesystem_software (FILESYSTEM filesystem)
 	}
 }
 
-//Report whether or not the kernel supports a particular file system
+/**
+ * kernel_supports_fs
+ * Report whether or not the kernel supports a particular file system
+ */
 bool Utils::kernel_supports_fs (const Glib::ustring & fs)
 {
 	bool fs_supported = false;
@@ -214,7 +238,10 @@ bool Utils::kernel_supports_fs (const Glib::ustring & fs)
 	return fs_supported;
 }
 
-//Report if kernel version is >= (major, minor, patch)
+/**
+ * kernel_version_at_least
+ * Report if kernel version is >= (major, minor, patch)
+ */
 bool Utils::kernel_version_at_least (int major_ver, int minor_ver, int patch_ver)
 {
 	int actual_major_ver, actual_minor_ver, actual_patch_ver;
@@ -226,6 +253,9 @@ bool Utils::kernel_version_at_least (int major_ver, int minor_ver, int patch_ver
 	return result;
 }
 
+/**
+ * format_size
+ */
 Glib::ustring Utils::format_size (Sector sectors, Byte_Value sector_size)
 {
 	std::stringstream ss;
@@ -258,6 +288,9 @@ Glib::ustring Utils::format_size (Sector sectors, Byte_Value sector_size)
 	}
 }
 
+/**
+ * format_time
+ */
 Glib::ustring Utils::format_time (std::time_t seconds)
 {
 	Glib::ustring time;
@@ -281,6 +314,9 @@ Glib::ustring Utils::format_time (std::time_t seconds)
 	return time;
 }
 
+/**
+ * sector_to_unit
+ */
 double Utils::sector_to_unit (Sector sectors, Byte_Value sector_size, SIZE_UNIT size_unit)
 {
 	switch (size_unit)
@@ -302,12 +338,18 @@ double Utils::sector_to_unit (Sector sectors, Byte_Value sector_size, SIZE_UNIT 
 	}
 }
 
+/**
+ * execute_command
+ */
 int Utils::execute_command (const Glib::ustring & command)
 {
 	Glib::ustring dummy;
 	return execute_command (command, dummy, dummy);
 }
 
+/**
+ * execute_command
+ */
 int Utils::execute_command (const Glib::ustring & command,
 			    Glib::ustring & output,
 			    Glib::ustring & error,
@@ -366,6 +408,9 @@ int Utils::execute_command (const Glib::ustring & command,
 	return exit_status;
 }
 
+/**
+ * regexp_label
+ */
 Glib::ustring Utils::regexp_label (const Glib::ustring & text
                                  , const Glib::ustring & pattern
                                 )
@@ -386,6 +431,9 @@ Glib::ustring Utils::regexp_label (const Glib::ustring & text
 		return "";
 }
 
+/**
+ * fat_compliant_label
+ */
 Glib::ustring Utils::fat_compliant_label (const Glib::ustring & label)
 {
 	//Limit volume label to 11 characters
@@ -395,6 +443,9 @@ Glib::ustring Utils::fat_compliant_label (const Glib::ustring & label)
 	return text;
 }
 
+/**
+ * create_mtoolsrc_file
+ */
 Glib::ustring Utils::create_mtoolsrc_file (char file_name[], const char drive_letter,
 		const Glib::ustring & device_path)
 {
@@ -444,6 +495,9 @@ Glib::ustring Utils::create_mtoolsrc_file (char file_name[], const char drive_le
 	return err_msg;
 }
 
+/**
+ * delete_mtoolsrc_file
+ */
 Glib::ustring Utils::delete_mtoolsrc_file (const char file_name[])
 {
 	//Delete mtools config file
@@ -452,6 +506,9 @@ Glib::ustring Utils::delete_mtoolsrc_file (const char file_name[])
 	return err_msg;
 }
 
+/**
+ * trim
+ */
 Glib::ustring Utils::trim (const Glib::ustring & src, const Glib::ustring & c /* = " \t\r\n" */)
 {
 	//Trim leading and trailing whitespace from string
@@ -462,6 +519,9 @@ Glib::ustring Utils::trim (const Glib::ustring & src, const Glib::ustring & c /*
 	return src.substr(p1, (p2-p1)+1);
 }
 
+/**
+ * cleanup_cursor
+ */
 Glib::ustring Utils::cleanup_cursor (const Glib::ustring & text)
 {
 	std::istringstream in(text);
@@ -493,6 +553,9 @@ Glib::ustring Utils::cleanup_cursor (const Glib::ustring & text)
 	return out.str();
 }
 
+/**
+ * get_lang
+ */
 Glib::ustring Utils::get_lang()
 {
 	//Extract base language from string that may look like "en_CA.UTF-8"
@@ -513,11 +576,14 @@ Glib::ustring Utils::get_lang()
 	return lang;
 }
 
-//Extract a list of tokens from any number of background separator characters
-//  E.g., tokenize(str="  word1   word2   ", tokens, delimiters=" ")
-//-> tokens=["word1","word2]
-//The tokenize method copied and adapted from:
-//  http://www.linuxselfhelp.com/HOWTO/C++Programming-HOWTO-7.html
+/**
+ * tokenize
+ * Extract a list of tokens from any number of background separator characters
+ * E.g., tokenize(str="  word1   word2   ", tokens, delimiters=" ")
+ * -> tokens=["word1","word2]
+ * The tokenize method copied and adapted from:
+ * http://www.linuxselfhelp.com/HOWTO/C++Programming-HOWTO-7.html
+ */
 void Utils::tokenize (const Glib::ustring& str,
                       std::vector<Glib::ustring>& tokens,
                       const Glib::ustring& delimiters = " ")
@@ -538,10 +604,13 @@ void Utils::tokenize (const Glib::ustring& str,
 	}
 }
 
-//Split string on every delimiter, appending to the vector.  Inspired by:
-//  http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c/3616605#3616605
-//  E.g. using Utils::split(str, result, ":") for str-> result
-//  ""-> []   "a"-> ["a"]   "::"-> ["","",""]   ":a::bb"-> ["","a","","bb"]
+/**
+ * split
+ * Split string on every delimiter, appending to the vector.  Inspired by:
+ *   http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c/3616605#3616605
+ *   E.g. using Utils::split(str, result, ":") for str-> result
+ *   ""-> []   "a"-> ["a"]   "::"-> ["","",""]   ":a::bb"-> ["","a","","bb"]
+ */
 void Utils::split (const Glib::ustring& str,
                    std::vector<Glib::ustring>& result,
                    const Glib::ustring& delimiters    )
@@ -562,7 +631,10 @@ void Utils::split (const Glib::ustring& str,
 	result. push_back (word);
 }
 
-// Converts a Glib::ustring into a int
+/**
+ * convert_to_int
+ * Converts a Glib::ustring into a int
+ */
 int Utils::convert_to_int(const Glib::ustring & src)
 {
 	int ret_val;
@@ -572,7 +644,10 @@ int Utils::convert_to_int(const Glib::ustring & src)
 	return ret_val;
 }
 
-// Create a new UUID
+/**
+ * generate_uuid
+ * Create a new UUID
+ */
 Glib::ustring Utils::generate_uuid(void)
 {
 	uuid_t uuid;
@@ -586,7 +661,10 @@ Glib::ustring Utils::generate_uuid(void)
 
 //private functions...
 
-//Read kernel version, reporting successs or failure
+/**
+ * get_kernel_version
+ * Read kernel version, reporting successs or failure
+ */
 bool Utils::get_kernel_version (int & major_ver, int & minor_ver, int & patch_ver)
 {
 	static bool read_file = false;

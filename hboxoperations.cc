@@ -2,6 +2,9 @@
 
 #include <gtkmm/stock.h>
 
+/**
+ * HBoxOperations
+ */
 HBoxOperations::HBoxOperations()
 {
 	//create listview for pending operations
@@ -41,6 +44,9 @@ HBoxOperations::HBoxOperations()
 		Gtk::Stock::CLOSE, sigc::mem_fun(*this, &HBoxOperations::on_close)));
 }
 
+/**
+ * load_operations
+ */
 void HBoxOperations::load_operations (const std::vector<Operation *> operations)
 {
 	liststore_operations->clear();
@@ -59,11 +65,17 @@ void HBoxOperations::load_operations (const std::vector<Operation *> operations)
 					*(--liststore_operations->children().end()))));
 }
 
+/**
+ * clear
+ */
 void HBoxOperations::clear()
 {
 	liststore_operations->clear();
 }
 
+/**
+ * on_signal_button_press_event
+ */
 bool HBoxOperations::on_signal_button_press_event (GdkEventButton * event)
 {
 	//right-click
@@ -79,26 +91,41 @@ bool HBoxOperations::on_signal_button_press_event (GdkEventButton * event)
 	return true;
 }
 
+/**
+ * on_undo
+ */
 void HBoxOperations::on_undo()
 {
 	signal_undo.emit();
 }
 
+/**
+ * on_clear
+ */
 void HBoxOperations::on_clear()
 {
 	signal_clear.emit();
 }
 
+/**
+ * on_apply
+ */
 void HBoxOperations::on_apply()
 {
 	signal_apply.emit();
 }
 
+/**
+ * on_close
+ */
 void HBoxOperations::on_close()
 {
 	signal_close.emit();
 }
 
+/**
+ * ~HBoxOperations
+ */
 HBoxOperations::~HBoxOperations()
 {
 }

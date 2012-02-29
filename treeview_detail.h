@@ -53,11 +53,11 @@ private:
 		Gtk::TreeModelColumn<Glib::ustring> size;
 		Gtk::TreeModelColumn<Glib::ustring> used;
 		Gtk::TreeModelColumn<Glib::ustring> unused;
-		Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> > color;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > color;
 		Gtk::TreeModelColumn<Glib::ustring> text_color;
 		Gtk::TreeModelColumn<Glib::ustring> mount_text_color;
-		Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> > icon1;
-		Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> > icon2;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon1;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon2;
 		Gtk::TreeModelColumn<Glib::ustring> flags;
 		Gtk::TreeModelColumn<Partition> partition; //hidden column
 

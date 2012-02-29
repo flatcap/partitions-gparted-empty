@@ -16,6 +16,9 @@
 
 std::vector<Glib::ustring> libparted_messages; //see ped_exception_handler()
 
+/**
+ * GParted_Core
+ */
 GParted_Core::GParted_Core()
 {
 	lp_device = NULL;
@@ -41,6 +44,9 @@ GParted_Core::GParted_Core()
 	find_supported_filesystems();
 }
 
+/**
+ * find_supported_filesystems
+ */
 void GParted_Core::find_supported_filesystems()
 {
 	std::map< FILESYSTEM, FileSystem * >::iterator f;
@@ -69,12 +75,18 @@ void GParted_Core::find_supported_filesystems()
 	}
 }
 
+/**
+ * set_user_devices
+ */
 void GParted_Core::set_user_devices (const std::vector<Glib::ustring> & user_devices)
 {
 	this->device_paths = user_devices;
 	this->probe_devices = ! user_devices.size();
 }
 
+/**
+ * set_devices
+ */
 void GParted_Core::set_devices (std::vector<Device> & devices)
 {
 	devices.clear();
@@ -216,7 +228,10 @@ void GParted_Core::set_devices (std::vector<Device> & devices)
 	fstab_info.clear();
 }
 
-// runs gpart on the specified parameter
+/**
+ * guess_partition_table
+ * runs gpart on the specified parameter
+ */
 void GParted_Core::guess_partition_table(const Device & device, Glib::ustring &buff)
 {
 	int pid, stdoutput, stderror;
@@ -252,17 +267,26 @@ void GParted_Core::guess_partition_table(const Device & device, Glib::ustring &b
 	return;
 }
 
+/**
+ * set_thread_status_message
+ */
 void GParted_Core::set_thread_status_message (Glib::ustring msg)
 {
 	//Remember to clear status message when finished with thread.
 	thread_status_message = msg;
 }
 
+/**
+ * get_thread_status_message
+ */
 Glib::ustring GParted_Core::get_thread_status_message()
 {
 	return thread_status_message;
 }
 
+/**
+ * snap_to_cylinder
+ */
 bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partition, Glib::ustring & error)
 {
 	Sector diff = 0;
@@ -313,6 +337,9 @@ bool GParted_Core::snap_to_cylinder (const Device & device, Partition & partitio
 	return true;
 }
 
+/**
+ * snap_to_mebibyte
+ */
 bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partition, Glib::ustring & error)
 {
 	Sector diff = 0;
@@ -394,6 +421,9 @@ bool GParted_Core::snap_to_mebibyte (const Device & device, Partition & partitio
 	return true;
 }
 
+/**
+ * snap_to_alignment
+ */
 bool GParted_Core::snap_to_alignment (const Device & device, Partition & partition, Glib::ustring & error)
 {
 	bool rc = true;
@@ -436,16 +466,25 @@ bool GParted_Core::snap_to_alignment (const Device & device, Partition & partiti
 	return rc;
 }
 
+/**
+ * apply_operation_to_disk
+ */
 bool GParted_Core::apply_operation_to_disk (Operation * operation)
 {
 	return 0;
 }
 
+/**
+ * set_disklabel
+ */
 bool GParted_Core::set_disklabel (const Glib::ustring & device_path, const Glib::ustring & disklabel)
 {
 	return 0;
 }
 
+/**
+ * toggle_flag
+ */
 bool GParted_Core::toggle_flag (const Partition & partition, const Glib::ustring & flag, bool state)
 {
 	bool success = false;
@@ -472,11 +511,17 @@ bool GParted_Core::toggle_flag (const Partition & partition, const Glib::ustring
 	return success;
 }
 
+/**
+ * get_filesystems
+ */
 const std::vector<FS> & GParted_Core::get_filesystems() const
 {
 	return FILESYSTEMS;
 }
 
+/**
+ * get_fs
+ */
 const FS & GParted_Core::get_fs (FILESYSTEM filesystem) const
 {
 	unsigned int unknown;
@@ -499,6 +544,9 @@ const FS & GParted_Core::get_fs (FILESYSTEM filesystem) const
 		return FILESYSTEMS[ unknown ];
 }
 
+/**
+ * get_disklabeltypes
+ */
 std::vector<Glib::ustring> GParted_Core::get_disklabeltypes()
 {
 	std::vector<Glib::ustring> disklabeltypes;
@@ -514,6 +562,9 @@ std::vector<Glib::ustring> GParted_Core::get_disklabeltypes()
 	 return disklabeltypes;
 }
 
+/**
+ * get_all_mountpoints
+ */
 std::vector<Glib::ustring> GParted_Core::get_all_mountpoints()
 {
 	std::vector<Glib::ustring> mountpoints;
@@ -524,6 +575,9 @@ std::vector<Glib::ustring> GParted_Core::get_all_mountpoints()
 	return mountpoints;
 }
 
+/**
+ * get_available_flags
+ */
 std::map<Glib::ustring, bool> GParted_Core::get_available_flags (const Partition & partition)
 {
 	std::map<Glib::ustring, bool> flag_info;
@@ -550,6 +604,9 @@ std::map<Glib::ustring, bool> GParted_Core::get_available_flags (const Partition
 	return flag_info;
 }
 
+/**
+ * get_libparted_version
+ */
 Glib::ustring GParted_Core::get_libparted_version()
 {
 	return ped_get_version();
@@ -557,6 +614,9 @@ Glib::ustring GParted_Core::get_libparted_version()
 
 //private functions...
 
+/**
+ * init_maps
+ */
 void GParted_Core::init_maps()
 {
 	mount_info.clear();
@@ -578,6 +638,9 @@ void GParted_Core::init_maps()
 	}
 }
 
+/**
+ * read_mountpoints_from_file
+ */
 void GParted_Core::read_mountpoints_from_file(
 	const Glib::ustring & filename,
 	std::map< Glib::ustring, std::vector<Glib::ustring> > & map)
@@ -618,6 +681,9 @@ void GParted_Core::read_mountpoints_from_file(
 	endmntent (fp);
 }
 
+/**
+ * read_mountpoints_from_file_swaps
+ */
 void GParted_Core::read_mountpoints_from_file_swaps(
 	const Glib::ustring & filename,
 	std::map< Glib::ustring, std::vector<Glib::ustring> > & map)
@@ -638,6 +704,9 @@ void GParted_Core::read_mountpoints_from_file_swaps(
 	}
 }
 
+/**
+ * get_partition_path
+ */
 Glib::ustring GParted_Core::get_partition_path (PedPartition * lp_partition)
 {
 	char * lp_path;  //we have to free the result of ped_partition_get_path()
@@ -653,6 +722,9 @@ Glib::ustring GParted_Core::get_partition_path (PedPartition * lp_partition)
 	return partition_path;
 }
 
+/**
+ * set_device_partitions
+ */
 void GParted_Core::set_device_partitions (Device & device)
 {
 	int EXT_INDEX = -1;
@@ -766,6 +838,9 @@ void GParted_Core::set_device_partitions (Device & device)
 	insert_unallocated (device.get_path(), device.partitions, 0, device.length -1, device.sector_size, false);
 }
 
+/**
+ * get_filesystem
+ */
 FILESYSTEM GParted_Core::get_filesystem()
 {
 	char magic1[16] = "";
@@ -946,6 +1021,9 @@ FILESYSTEM GParted_Core::get_filesystem()
 	return FS_UNKNOWN;
 }
 
+/**
+ * read_label
+ */
 void GParted_Core::read_label (Partition & partition)
 {
 	if (partition.type != TYPE_EXTENDED)
@@ -962,6 +1040,9 @@ void GParted_Core::read_label (Partition & partition)
 	}
 }
 
+/**
+ * read_uuid
+ */
 void GParted_Core::read_uuid (Partition & partition)
 {
 	if (partition.type != TYPE_EXTENDED)
@@ -979,6 +1060,9 @@ void GParted_Core::read_uuid (Partition & partition)
 	}
 }
 
+/**
+ * insert_unallocated
+ */
 void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 				       std::vector<Partition> & partitions,
 				       Sector start,
@@ -1035,6 +1119,9 @@ void GParted_Core::insert_unallocated (const Glib::ustring & device_path,
 	}
 }
 
+/**
+ * set_mountpoints
+ */
 void GParted_Core::set_mountpoints (std::vector<Partition> & partitions)
 {
 	for (unsigned int t = 0; t < partitions.size(); t++)
@@ -1078,6 +1165,9 @@ void GParted_Core::set_mountpoints (std::vector<Partition> & partitions)
 	}
 }
 
+/**
+ * set_used_sectors
+ */
 void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 {
 	struct statvfs sfs;
@@ -1145,6 +1235,9 @@ void GParted_Core::set_used_sectors (std::vector<Partition> & partitions)
 	}
 }
 
+/**
+ * set_flags
+ */
 void GParted_Core::set_flags (Partition & partition)
 {
 	for (unsigned int t = 0; t < flags.size(); t++)
@@ -1153,6 +1246,9 @@ void GParted_Core::set_flags (Partition & partition)
 			partition.flags.push_back (ped_partition_flag_get_name (flags[ t ]));
 }
 
+/**
+ * create
+ */
 bool GParted_Core::create (const Device & device, Partition & new_partition, OperationDetail & operationdetail)
 {
 	if (new_partition.type == TYPE_EXTENDED)
@@ -1171,36 +1267,57 @@ bool GParted_Core::create (const Device & device, Partition & new_partition, Ope
 	return false;
 }
 
+/**
+ * create_partition
+ */
 bool GParted_Core::create_partition (Partition & new_partition, OperationDetail & operationdetail, Sector min_size)
 {
 	return 0;
 }
 
+/**
+ * create_filesystem
+ */
 bool GParted_Core::create_filesystem (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * format
+ */
 bool GParted_Core::format (const Partition & partition, OperationDetail & operationdetail)
 {
 	return set_partition_type (partition, operationdetail) && create_filesystem (partition, operationdetail);
 }
 
+/**
+ * Delete
+ */
 bool GParted_Core::Delete (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * label_partition
+ */
 bool GParted_Core::label_partition (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * change_uuid
+ */
 bool GParted_Core::change_uuid (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * resize_move
+ */
 bool GParted_Core::resize_move (const Device & device,
 				const Partition & partition_old,
 				Partition & partition_new,
@@ -1247,6 +1364,9 @@ bool GParted_Core::resize_move (const Device & device,
 	return false;
 }
 
+/**
+ * move
+ */
 bool GParted_Core::move (const Device & device,
 			 const Partition & partition_old,
 			 const Partition & partition_new,
@@ -1255,6 +1375,9 @@ bool GParted_Core::move (const Device & device,
 	return 0;
 }
 
+/**
+ * move_filesystem
+ */
 bool GParted_Core::move_filesystem (const Partition & partition_old,
 				    const Partition & partition_new,
 				    OperationDetail & operationdetail)
@@ -1262,6 +1385,9 @@ bool GParted_Core::move_filesystem (const Partition & partition_old,
 	return 0;
 }
 
+/**
+ * resize
+ */
 bool GParted_Core::resize (const Partition & partition_old,
 			   const Partition & partition_new,
 			   OperationDetail & operationdetail)
@@ -1269,6 +1395,9 @@ bool GParted_Core::resize (const Partition & partition_old,
 	return 0;
 }
 
+/**
+ * resize_move_partition
+ */
 bool GParted_Core::resize_move_partition (const Partition & partition_old,
 					  const Partition & partition_new,
 					  OperationDetail & operationdetail)
@@ -1276,6 +1405,9 @@ bool GParted_Core::resize_move_partition (const Partition & partition_old,
 	return 0;
 }
 
+/**
+ * resize_filesystem
+ */
 bool GParted_Core::resize_filesystem (const Partition & partition_old,
 				      const Partition & partition_new,
 				      OperationDetail & operationdetail,
@@ -1284,11 +1416,17 @@ bool GParted_Core::resize_filesystem (const Partition & partition_old,
 	return 0;
 }
 
+/**
+ * maximize_filesystem
+ */
 bool GParted_Core::maximize_filesystem (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * copy
+ */
 bool GParted_Core::copy (const Partition & partition_src,
 			 Partition & partition_dst,
 			 Byte_Value min_size,
@@ -1297,6 +1435,9 @@ bool GParted_Core::copy (const Partition & partition_src,
 	return 0;
 }
 
+/**
+ * copy_filesystem_simulation
+ */
 bool GParted_Core::copy_filesystem_simulation (const Partition & partition_src,
 					       const Partition & partition_dst,
 					       OperationDetail & operationdetail)
@@ -1304,6 +1445,9 @@ bool GParted_Core::copy_filesystem_simulation (const Partition & partition_src,
 	return 0;
 }
 
+/**
+ * copy_filesystem
+ */
 bool GParted_Core::copy_filesystem (const Partition & partition_src,
 				    const Partition & partition_dst,
 				    OperationDetail & operationdetail,
@@ -1322,6 +1466,9 @@ bool GParted_Core::copy_filesystem (const Partition & partition_src,
 				dummy);
 }
 
+/**
+ * copy_filesystem
+ */
 bool GParted_Core::copy_filesystem (const Partition & partition_src,
 				    const Partition & partition_dst,
 				    OperationDetail & operationdetail,
@@ -1339,6 +1486,9 @@ bool GParted_Core::copy_filesystem (const Partition & partition_src,
 				total_done);
 }
 
+/**
+ * copy_filesystem
+ */
 bool GParted_Core::copy_filesystem (const Glib::ustring & src_device,
 				    const Glib::ustring & dst_device,
 				    Sector src_start,
@@ -1353,6 +1503,9 @@ bool GParted_Core::copy_filesystem (const Glib::ustring & src_device,
 	return 0;
 }
 
+/**
+ * rollback_transaction
+ */
 void GParted_Core::rollback_transaction (const Partition & partition_src,
 					 const Partition & partition_dst,
 					 OperationDetail & operationdetail,
@@ -1360,16 +1513,25 @@ void GParted_Core::rollback_transaction (const Partition & partition_src,
 {
 }
 
+/**
+ * check_repair_filesystem
+ */
 bool GParted_Core::check_repair_filesystem (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * set_partition_type
+ */
 bool GParted_Core::set_partition_type (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * set_progress_info
+ */
 void GParted_Core::set_progress_info (Byte_Value total,
 				      Byte_Value done,
 				      const Glib::Timer & timer,
@@ -1378,6 +1540,9 @@ void GParted_Core::set_progress_info (Byte_Value total,
 {
 }
 
+/**
+ * copy_blocks
+ */
 bool GParted_Core::copy_blocks (const Glib::ustring & src_device,
 				const Glib::ustring & dst_device,
 				Sector src_start,
@@ -1391,6 +1556,9 @@ bool GParted_Core::copy_blocks (const Glib::ustring & src_device,
 	return 0;
 }
 
+/**
+ * copy_block
+ */
 bool GParted_Core::copy_block (PedDevice * lp_device_src,
 			       PedDevice * lp_device_dst,
 			       Sector offset_src,
@@ -1433,11 +1601,17 @@ bool GParted_Core::copy_block (PedDevice * lp_device_src,
 	return false;
 }
 
+/**
+ * calibrate_partition
+ */
 bool GParted_Core::calibrate_partition (Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * calculate_exact_geom
+ */
 bool GParted_Core::calculate_exact_geom (const Partition & partition_old,
 				         Partition & partition_new,
 				         OperationDetail & operationdetail)
@@ -1445,6 +1619,9 @@ bool GParted_Core::calculate_exact_geom (const Partition & partition_old,
 	return 0;
 }
 
+/**
+ * set_proper_filesystem
+ */
 bool GParted_Core::set_proper_filesystem (const FILESYSTEM & filesystem)
 {
 	p_filesystem = get_filesystem_object (filesystem);
@@ -1452,6 +1629,9 @@ bool GParted_Core::set_proper_filesystem (const FILESYSTEM & filesystem)
 	return p_filesystem;
 }
 
+/**
+ * get_filesystem_object
+ */
 FileSystem * GParted_Core::get_filesystem_object (const FILESYSTEM & filesystem)
 {
 	if (FILESYSTEM_MAP.count (filesystem))
@@ -1460,11 +1640,17 @@ FileSystem * GParted_Core::get_filesystem_object (const FILESYSTEM & filesystem)
 	    return NULL;
 }
 
+/**
+ * update_bootsector
+ */
 bool GParted_Core::update_bootsector (const Partition & partition, OperationDetail & operationdetail)
 {
 	return 0;
 }
 
+/**
+ * open_device
+ */
 bool GParted_Core::open_device (const Glib::ustring & device_path)
 {
 	lp_device = ped_device_get (device_path.c_str());
@@ -1472,6 +1658,9 @@ bool GParted_Core::open_device (const Glib::ustring & device_path)
 	return lp_device;
 }
 
+/**
+ * open_device_and_disk
+ */
 bool GParted_Core::open_device_and_disk (const Glib::ustring & device_path, bool strict)
 {
 	lp_device = NULL;
@@ -1492,6 +1681,9 @@ bool GParted_Core::open_device_and_disk (const Glib::ustring & device_path, bool
 	return false;
 }
 
+/**
+ * close_disk
+ */
 void GParted_Core::close_disk()
 {
 	if (lp_disk)
@@ -1500,6 +1692,9 @@ void GParted_Core::close_disk()
 	lp_disk = NULL;
 }
 
+/**
+ * close_device_and_disk
+ */
 void GParted_Core::close_device_and_disk()
 {
 	close_disk();
@@ -1510,6 +1705,9 @@ void GParted_Core::close_device_and_disk()
 	lp_device = NULL;
 }
 
+/**
+ * commit
+ */
 bool GParted_Core::commit()
 {
 	bool success = ped_disk_commit_to_dev (lp_disk);
@@ -1519,6 +1717,9 @@ bool GParted_Core::commit()
 	return success;
 }
 
+/**
+ * commit_to_os
+ */
 bool GParted_Core::commit_to_os (std::time_t timeout)
 {
 	bool success;
@@ -1529,6 +1730,9 @@ bool GParted_Core::commit_to_os (std::time_t timeout)
 	return success;
 }
 
+/**
+ * settle_device
+ */
 void GParted_Core::settle_device (std::time_t timeout)
 {
 	if (! Glib::find_program_in_path ("udevsettle").empty())
@@ -1539,6 +1743,9 @@ void GParted_Core::settle_device (std::time_t timeout)
 		sleep (timeout);
 }
 
+/**
+ * ped_exception_handler
+ */
 PedExceptionOption GParted_Core::ped_exception_handler (PedException * e)
 {
 	PedExceptionOption ret = PED_EXCEPTION_UNHANDLED;
@@ -1564,6 +1771,9 @@ PedExceptionOption GParted_Core::ped_exception_handler (PedException * e)
 	return ret;
 }
 
+/**
+ * ~GParted_Core
+ */
 GParted_Core::~GParted_Core()
 {
 	delete p_filesystem;

@@ -1,9 +1,15 @@
 #include "operation.h"
 
+/**
+ * Operation
+ */
 Operation::Operation()
 {
 }
 
+/**
+ * find_index_original
+ */
 int Operation::find_index_original (const std::vector<Partition> & partitions)
 {
 	for (unsigned int t = 0; t < partitions.size(); t++)
@@ -14,6 +20,9 @@ int Operation::find_index_original (const std::vector<Partition> & partitions)
 	return -1;
 }
 
+/**
+ * find_index_extended
+ */
 int Operation::find_index_extended (const std::vector<Partition> & partitions)
 {
 	for (unsigned int t = 0; t < partitions.size(); t++)
@@ -23,6 +32,9 @@ int Operation::find_index_extended (const std::vector<Partition> & partitions)
 	return -1;
 }
 
+/**
+ * insert_unallocated
+ */
 void Operation::insert_unallocated (std::vector<Partition> & partitions, Sector start, Sector end, Byte_Value sector_size, bool inside_extended)
 {
 	Partition UNALLOCATED;
