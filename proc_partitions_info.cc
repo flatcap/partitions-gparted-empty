@@ -90,15 +90,15 @@ void Proc_Partitions_Info::load_proc_partitions_info_cache()
 			//Build cache of disk devices.
 			//Whole disk devices are the ones we want.
 			//Device names without a trailing digit refer to the whole disk.
-			device = Utils::regexp_label(line, "^[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+([^0-9]+)$");
+			device = Utils::regexp_label(line, "^[\t]+[0-9]+[\t]+[0-9]+[\t]+[0-9]+[\t]+([^0-9]+)$");
 			//Recognize /dev/mmcblk* devices.
 			//E.g., device = /dev/mmcblk0, partition = /dev/mmcblk0p1
 			if (device == "")
-				device = Utils::regexp_label(line, "^[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+(mmcblk[0-9]+)$");
+				device = Utils::regexp_label(line, "^[\t]+[0-9]+[\t]+[0-9]+[\t]+[0-9]+[\t]+(mmcblk[0-9]+)$");
 			//Device names that end with a #[^p]# are HP Smart Array Devices (disks)
 			//E.g., device = /dev/cciss/c0d0, partition = /dev/cciss/c0d0p1
 			if (device == "")
-				device = Utils::regexp_label(line, "^[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+[0-9]+[\t ]+(.*[0-9]+[^p]{1}[0-9]+)$");
+				device = Utils::regexp_label(line, "^[\t]+[0-9]+[\t]+[0-9]+[\t]+[0-9]+[\t]+(.*[0-9]+[^p]{1}[0-9]+)$");
 			if (device != "")
 			{
 				//add potential device to the list
@@ -120,8 +120,8 @@ void Proc_Partitions_Info::load_proc_partitions_info_cache()
 				{
 					//Because we can make no assumption about which path libparted will
 					//detect, we add all combinations.
-					alternate_paths_cache[ c_str ] = line;
-					alternate_paths_cache[ line ] = c_str;
+					alternate_paths_cache[c_str] = line;
+					alternate_paths_cache[line] = c_str;
 				}
 			}
 

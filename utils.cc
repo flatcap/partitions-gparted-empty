@@ -426,7 +426,7 @@ Glib::ustring Utils::regexp_label (const Glib::ustring & text
 	results = myregexp->split (text);
 
 	if (results.size() >= 2)
-		return results[ 1 ];
+		return results[1];
 	else
 		return "";
 }

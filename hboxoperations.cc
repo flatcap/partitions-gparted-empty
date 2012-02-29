@@ -55,8 +55,8 @@ void HBoxOperations::load_operations (const std::vector<Operation *> operations)
 	for (unsigned int t = 0; t < operations.size(); t++)
 	{
 		treerow = * (liststore_operations->append());
-		treerow[ treeview_operations_columns.operation_description ] = operations[ t ]->description;
-		treerow[ treeview_operations_columns.operation_icon ] = operations[ t ]->icon;
+		treerow[treeview_operations_columns.operation_description] = operations[t]->description;
+		treerow[treeview_operations_columns.operation_icon] = operations[t]->icon;
 	}
 
 	//make scrollwindow focus on the last operation in the list

@@ -69,8 +69,8 @@ void DrawingAreaVisualDisk::clear()
 int DrawingAreaVisualDisk::get_total_separator_px (const std::vector<Partition> & partitions)
 {
 	for (unsigned int t = 0; t < partitions.size(); t++)
-		if (partitions[ t ].type == TYPE_EXTENDED)
-			return (partitions[ t ].logicals.size() -1 + partitions.size() -1) * SEP;
+		if (partitions[t].type == TYPE_EXTENDED)
+			return (partitions[t].logicals.size() -1 + partitions.size() -1) * SEP;
 
 	return (partitions.size() -1) * SEP;
 }
@@ -86,25 +86,25 @@ void DrawingAreaVisualDisk::set_static_data (const std::vector<Partition> & part
 	{
 		visual_partitions.push_back (visual_partition());
 
-		visual_partitions.back().partition = partitions[ t ];
-		visual_partitions.back().fraction = partitions[ t ].get_sector_length() / static_cast<double> (length);
+		visual_partitions.back().partition = partitions[t];
+		visual_partitions.back().fraction = partitions[t].get_sector_length() / static_cast<double> (length);
 
-		if (partitions[ t ].type == TYPE_UNALLOCATED || partitions[ t ].type == TYPE_EXTENDED)
+		if (partitions[t].type == TYPE_UNALLOCATED || partitions[t].type == TYPE_EXTENDED)
 			visual_partitions.back().fraction_used = -1;
-		else if (partitions[ t ].sectors_used > 0)
+		else if (partitions[t].sectors_used > 0)
 			visual_partitions.back().fraction_used =
-				partitions[ t ].sectors_used / static_cast<double> (partitions[ t ].get_sector_length());
+				partitions[t].sectors_used / static_cast<double> (partitions[t].get_sector_length());
 
-		visual_partitions.back().color = partitions[ t ].color;
+		visual_partitions.back().color = partitions[t].color;
 		get_colormap()->alloc_color (visual_partitions.back().color);
 
-		if (partitions[ t ].type == TYPE_EXTENDED)
-			set_static_data (partitions[ t ].logicals,
+		if (partitions[t].type == TYPE_EXTENDED)
+			set_static_data (partitions[t].logicals,
 					 visual_partitions.back().logicals,
-					 partitions[ t ].get_sector_length());
+					 partitions[t].get_sector_length());
 		else
 			visual_partitions.back().pango_layout = create_pango_layout(
-				partitions[ t ].get_path() + "\n" + Utils::format_size (partitions[ t ].get_sector_length(), partitions[ t ].sector_size));
+				partitions[t].get_path() + "\n" + Utils::format_size (partitions[t].get_sector_length(), partitions[t].sector_size));
 	}
 }
 
@@ -117,16 +117,16 @@ int DrawingAreaVisualDisk::calc_length (std::vector<visual_partition> & visual_p
 
 	for (int t = 0; t < static_cast<int> (visual_partitions.size()); t++)
 	{
-		visual_partitions[ t ].length = Utils::round (length_px * visual_partitions[ t ].fraction);
+		visual_partitions[t].length = Utils::round (length_px * visual_partitions[t].fraction);
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			visual_partitions[ t ].length =
-				calc_length (visual_partitions[ t ].logicals,
-					     visual_partitions[ t ].length - (2 * BORDER)) + (2 * BORDER);
-		else if (visual_partitions[ t ].length < MIN_SIZE)
-			visual_partitions[ t ].length = MIN_SIZE;
+		if (visual_partitions[t].logicals.size() > 0)
+			visual_partitions[t].length =
+				calc_length (visual_partitions[t].logicals,
+					     visual_partitions[t].length - (2 * BORDER)) + (2 * BORDER);
+		else if (visual_partitions[t].length < MIN_SIZE)
+			visual_partitions[t].length = MIN_SIZE;
 
-		calced_length += visual_partitions[ t ].length;
+		calced_length += visual_partitions[t].length;
 	}
 
 	return calced_length + (visual_partitions.size() - 1) * SEP;
@@ -141,16 +141,16 @@ void DrawingAreaVisualDisk::calc_position_and_height (std::vector<visual_partiti
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
 	{
-		visual_partitions[ t ].x_start = start;
-		visual_partitions[ t ].y_start = border;
-		visual_partitions[ t ].height = HEIGHT - (border * 2);
+		visual_partitions[t].x_start = start;
+		visual_partitions[t].y_start = border;
+		visual_partitions[t].height = HEIGHT - (border * 2);
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			calc_position_and_height (visual_partitions[ t ].logicals,
-						  visual_partitions[ t ].x_start + BORDER,
-						  visual_partitions[ t ].y_start + BORDER);
+		if (visual_partitions[t].logicals.size() > 0)
+			calc_position_and_height (visual_partitions[t].logicals,
+						  visual_partitions[t].x_start + BORDER,
+						  visual_partitions[t].y_start + BORDER);
 
-		start += visual_partitions[ t ].length + SEP;
+		start += visual_partitions[t].length + SEP;
 	}
 }
 
@@ -161,28 +161,28 @@ void DrawingAreaVisualDisk::calc_used_unused (std::vector<visual_partition> & vi
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
 	{
-		if (visual_partitions[ t ].fraction_used > -1)
+		if (visual_partitions[t].fraction_used > -1)
 		{
 			//used
-			visual_partitions[ t ].x_used_start = visual_partitions[ t ].x_start + BORDER;
+			visual_partitions[t].x_used_start = visual_partitions[t].x_start + BORDER;
 
-			if (visual_partitions[ t ].fraction_used)
-				visual_partitions[ t ].used_length =
-					Utils::round ((visual_partitions[ t ].length - (2*BORDER)) * visual_partitions[ t ].fraction_used);
+			if (visual_partitions[t].fraction_used)
+				visual_partitions[t].used_length =
+					Utils::round ((visual_partitions[t].length - (2*BORDER)) * visual_partitions[t].fraction_used);
 
 			//unused
-			visual_partitions[ t ].x_unused_start =
-				visual_partitions[ t ].x_used_start + visual_partitions[ t ].used_length ;
-			visual_partitions[ t ].unused_length =
-				visual_partitions[ t ].length - (2 * BORDER) - visual_partitions[ t ].used_length;
+			visual_partitions[t].x_unused_start =
+				visual_partitions[t].x_used_start + visual_partitions[t].used_length ;
+			visual_partitions[t].unused_length =
+				visual_partitions[t].length - (2 * BORDER) - visual_partitions[t].used_length;
 
 			//y position and height
-			visual_partitions[ t ].y_used_unused_start = visual_partitions[ t ].y_start + BORDER;
-			visual_partitions[ t ].used_unused_height = visual_partitions[ t ].height - (2 * BORDER);
+			visual_partitions[t].y_used_unused_start = visual_partitions[t].y_start + BORDER;
+			visual_partitions[t].used_unused_height = visual_partitions[t].height - (2 * BORDER);
 		}
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			calc_used_unused (visual_partitions[ t ].logicals);
+		if (visual_partitions[t].logicals.size() > 0)
+			calc_used_unused (visual_partitions[t].logicals);
 	}
 }
 
@@ -195,24 +195,24 @@ void DrawingAreaVisualDisk::calc_text (std::vector<visual_partition> & visual_pa
 
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
 	{
-		if (visual_partitions[ t ].pango_layout)
+		if (visual_partitions[t].pango_layout)
 		{
 			//see if the text fits in the partition... (and if so, center the text..)
-			visual_partitions[ t ].pango_layout->get_pixel_size (length, height);
-			if (length < visual_partitions[ t ].length - (2 * BORDER) - 2)
+			visual_partitions[t].pango_layout->get_pixel_size (length, height);
+			if (length < visual_partitions[t].length - (2 * BORDER) - 2)
 			{
-				visual_partitions[ t ].x_text = visual_partitions[ t ].x_start +
-					Utils::round ((visual_partitions[ t ].length / 2) - (length / 2));
+				visual_partitions[t].x_text = visual_partitions[t].x_start +
+					Utils::round ((visual_partitions[t].length / 2) - (length / 2));
 
-				visual_partitions[ t ].y_text = visual_partitions[ t ].y_start +
-					Utils::round ((visual_partitions[ t ].height / 2) - (height / 2));
+				visual_partitions[t].y_text = visual_partitions[t].y_start +
+					Utils::round ((visual_partitions[t].height / 2) - (height / 2));
 			}
 			else
-				visual_partitions[ t ].x_text = visual_partitions[ t ].y_text = 0;
+				visual_partitions[t].x_text = visual_partitions[t].y_text = 0;
 		}
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			calc_text (visual_partitions[ t ].logicals);
+		if (visual_partitions[t].logicals.size() > 0)
+			calc_text (visual_partitions[t].logicals);
 	}
 }
 
@@ -272,10 +272,10 @@ void DrawingAreaVisualDisk::draw_partitions (const std::vector<visual_partition>
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
 	{
-		draw_partition (visual_partitions[ t ]);
+		draw_partition (visual_partitions[t]);
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			draw_partitions (visual_partitions[ t ].logicals);
+		if (visual_partitions[t].logicals.size() > 0)
+			draw_partitions (visual_partitions[t].logicals);
 	}
 }
 
@@ -286,16 +286,16 @@ void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & 
 {
 	for (unsigned int t = 0; t < visual_partitions.size() && ! selected_vp; t++)
 	{
-		if (visual_partitions[ t ].logicals.size() > 0 )
-			set_selected (visual_partitions[ t ].logicals, x, y);
+		if (visual_partitions[t].logicals.size() > 0 )
+			set_selected (visual_partitions[t].logicals, x, y);
 
 		if (! selected_vp &&
-		     visual_partitions[ t ].x_start <= x &&
-		     x < visual_partitions[ t ].x_start + visual_partitions[ t ].length &&
-		     visual_partitions[ t ].y_start <= y &&
-		     y < visual_partitions[ t ].y_start + visual_partitions[ t ].height)
+		     visual_partitions[t].x_start <= x &&
+		     x < visual_partitions[t].x_start + visual_partitions[t].length &&
+		     visual_partitions[t].y_start <= y &&
+		     y < visual_partitions[t].y_start + visual_partitions[t].height)
 		{
-			selected_vp = & visual_partitions[ t ];
+			selected_vp = & visual_partitions[t];
 		}
 	}
 }
@@ -308,11 +308,11 @@ void DrawingAreaVisualDisk::set_selected (const std::vector<visual_partition> & 
 {
 	for (unsigned int t = 0; t < visual_partitions.size() && ! selected_vp; t++)
 	{
-		if (visual_partitions[ t ].logicals.size() > 0)
-			set_selected (visual_partitions[ t ].logicals, partition);
+		if (visual_partitions[t].logicals.size() > 0)
+			set_selected (visual_partitions[t].logicals, partition);
 
-		if (! selected_vp && visual_partitions[ t ].partition == partition)
-			selected_vp = & visual_partitions[ t ];
+		if (! selected_vp && visual_partitions[t].partition == partition)
+			selected_vp = & visual_partitions[t];
 	}
 }
 
@@ -430,9 +430,9 @@ int DrawingAreaVisualDisk::spreadout_leftover_px (std::vector<visual_partition> 
 	int extended = -1;
 
 	for (unsigned int t = 0; t < visual_partitions.size() && pixels > 0; t++)
-		if (! visual_partitions[ t ].logicals.size())
+		if (! visual_partitions[t].logicals.size())
 		{
-			visual_partitions[ t ].length++;
+			visual_partitions[t].length++;
 			pixels--;
 		}
 		else
@@ -440,8 +440,8 @@ int DrawingAreaVisualDisk::spreadout_leftover_px (std::vector<visual_partition> 
 
 	if (extended > -1 && pixels > 0)
 	{
-		int actually_used = pixels - spreadout_leftover_px (visual_partitions[ extended ].logicals, pixels);
-		visual_partitions[ extended ].length += actually_used;
+		int actually_used = pixels - spreadout_leftover_px (visual_partitions[extended].logicals, pixels);
+		visual_partitions[extended].length += actually_used;
 		pixels -= actually_used;
 	}
 
@@ -455,10 +455,10 @@ void DrawingAreaVisualDisk::free_colors (std::vector<visual_partition> & visual_
 {
 	for (unsigned int t = 0; t < visual_partitions.size(); t++)
 	{
-		get_colormap()->free_colors (visual_partitions[ t ].color, 1);
+		get_colormap()->free_colors (visual_partitions[t].color, 1);
 
-		if (visual_partitions[ t ].logicals.size() > 0)
-			free_colors (visual_partitions[ t ].logicals);
+		if (visual_partitions[t].logicals.size() > 0)
+			free_colors (visual_partitions[t].logicals);
 	}
 }
 

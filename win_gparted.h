@@ -48,60 +48,32 @@ private:
 	void toggle_item (bool state, int menu_item, int toolbar_item = -1)
         {
                 if (menu_item >= 0 && menu_item < static_cast<int> (menu_partition.items().size()))
-                        menu_partition.items()[ menu_item ].set_sensitive (state);
+                        menu_partition.items()[menu_item].set_sensitive (state);
 
                 if (toolbar_item >= 0 && toolbar_item < toolbar_main.get_n_items())
                         toolbar_main.get_nth_item (toolbar_item)->set_sensitive (state);
         }
 
-	void allow_new (bool state)	{
-		toggle_item (state, MENU_NEW, TOOLBAR_NEW); }
-
-	void allow_delete (bool state)	{
-		toggle_item (state, MENU_DEL, TOOLBAR_DEL); }
-
-	void allow_resize (bool state)	{
-		toggle_item (state, MENU_RESIZE_MOVE, TOOLBAR_RESIZE_MOVE); }
-
-	void allow_copy (bool state)	{
-		toggle_item (state, MENU_COPY, TOOLBAR_COPY); }
-
-	void allow_paste (bool state)	{
-		toggle_item (state, MENU_PASTE, TOOLBAR_PASTE); }
-
-	void allow_format (bool state)	{
-		toggle_item (state, MENU_FORMAT); }
-
-	void allow_toggle_swap_mount_state (bool state)	{
-		toggle_item (state, MENU_TOGGLE_MOUNT_SWAP); }
-
-	void allow_manage_flags (bool state) {
-		toggle_item (state, MENU_FLAGS); }
-
-	void allow_check (bool state) {
-		toggle_item (state, MENU_CHECK); }
-
-	void allow_label_partition (bool state)	{
-		toggle_item (state, MENU_LABEL_PARTITION); }
-
-	void allow_change_uuid (bool state)	{
-		toggle_item (state, MENU_CHANGE_UUID); }
-
-	void allow_info (bool state)	{
-		toggle_item (state, MENU_INFO); }
+	void allow_new (bool state) { toggle_item (state, MENU_NEW, TOOLBAR_NEW); }
+	void allow_delete (bool state) { toggle_item (state, MENU_DEL, TOOLBAR_DEL); }
+	void allow_resize (bool state) { toggle_item (state, MENU_RESIZE_MOVE, TOOLBAR_RESIZE_MOVE); }
+	void allow_copy (bool state) { toggle_item (state, MENU_COPY, TOOLBAR_COPY); }
+	void allow_paste (bool state) { toggle_item (state, MENU_PASTE, TOOLBAR_PASTE); }
+	void allow_format (bool state) { toggle_item (state, MENU_FORMAT); }
+	void allow_toggle_swap_mount_state (bool state)	{ toggle_item (state, MENU_TOGGLE_MOUNT_SWAP); }
+	void allow_manage_flags (bool state) { toggle_item (state, MENU_FLAGS); }
+	void allow_check (bool state) { toggle_item (state, MENU_CHECK); }
+	void allow_label_partition (bool state)	{ toggle_item (state, MENU_LABEL_PARTITION); }
+	void allow_change_uuid (bool state) { toggle_item (state, MENU_CHANGE_UUID); }
+	void allow_info (bool state) { toggle_item (state, MENU_INFO); }
 
 	void allow_undo_clear_apply (bool state)
 	{
 		toggle_item (state, -1, TOOLBAR_UNDO);
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 0 ])
-			->set_sensitive (state);
-
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 1 ])
-			->set_sensitive (state);
-
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[1].get_submenu()->items()[0])->set_sensitive (state);
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[1].get_submenu()->items()[1])->set_sensitive (state);
 		toggle_item (state, -1, TOOLBAR_APPLY);
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 1 ].get_submenu()->items()[ 2 ])
-			->set_sensitive (state);
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[1].get_submenu()->items()[2])->set_sensitive (state);
 	}
 
 	//threads..
@@ -158,13 +130,13 @@ private:
 	int  active_partitions_on_device_count (const Device & device);
 	void activate_apply();
 
-//private variables
+	//private variables
 	unsigned int current_device;
 	Partition selected_partition, copied_partition;
 	std::vector<Device> devices;
 	std::vector<Operation *> operations;
 
-//gui stuff
+	//gui stuff
 	Gtk::HPaned hpaned_main;
 	Gtk::VPaned vpaned_main;
 	Gtk::VBox vbox_main,vbox_info;

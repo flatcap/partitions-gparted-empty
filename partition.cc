@@ -127,10 +127,10 @@ void Partition::Update_Number (int new_number)
 	unsigned int index;
 	for (unsigned int t = 0; t < paths.size(); t++)
 	{
-		index = paths[ t ].rfind (Utils::num_to_str (partition_number));
+		index = paths[t].rfind (Utils::num_to_str (partition_number));
 
-		if (index < paths[ t ].length())
-			paths[ t ].replace (index,
+		if (index < paths[t].length())
+			paths[t].replace (index,
 				       Utils::num_to_str (partition_number).length(),
 				       Utils::num_to_str (new_number));
 	}

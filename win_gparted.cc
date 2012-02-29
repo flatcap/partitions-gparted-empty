@@ -384,9 +384,9 @@ Gtk::Menu * Win_GParted::create_format_menu()
 	{
 		//Skip luks, lvm2, and unknown because these are not file systems
 		if (
-		     gparted_core.get_filesystems()[ t ].filesystem == FS_LUKS    ||
-		     gparted_core.get_filesystems()[ t ].filesystem == FS_LVM2_PV ||
-		     gparted_core.get_filesystems()[ t ].filesystem == FS_UNKNOWN
+		     gparted_core.get_filesystems()[t].filesystem == FS_LUKS    ||
+		     gparted_core.get_filesystems()[t].filesystem == FS_LVM2_PV ||
+		     gparted_core.get_filesystems()[t].filesystem == FS_UNKNOWN
 		  )
 			continue;
 
@@ -395,20 +395,20 @@ Gtk::Menu * Win_GParted::create_format_menu()
 		//the colored square
 		hbox->pack_start (* manage (new Gtk::Image(
 					Utils::get_color_as_pixbuf(
-						gparted_core.get_filesystems()[ t ].filesystem, 16, 16))),
+						gparted_core.get_filesystems()[t].filesystem, 16, 16))),
 				   Gtk::PACK_SHRINK);
 
 		//the label...
 		hbox->pack_start (* Utils::mk_label(
 					" " +
-					Utils::get_filesystem_string (gparted_core.get_filesystems()[ t ].filesystem)),
+					Utils::get_filesystem_string (gparted_core.get_filesystems()[t].filesystem)),
 				   Gtk::PACK_SHRINK);
 
 		menu->items().push_back (* manage (new Gtk::MenuItem (*hbox)));
-		if (gparted_core.get_filesystems()[ t ].create)
+		if (gparted_core.get_filesystems()[t].create)
 			menu->items().back().signal_activate().connect(
 				sigc::bind<FILESYSTEM>(sigc::mem_fun(*this, &Win_GParted::activate_format),
-				gparted_core.get_filesystems()[ t ].filesystem));
+				gparted_core.get_filesystems()[t].filesystem));
 		else
 			menu->items().back().set_sensitive (false);
 	}
@@ -561,15 +561,15 @@ void Win_GParted::refresh_combo_devices()
 	{
 		//combo...
 		treerow = * (liststore_devices->append());
-		treerow[ treeview_devices_columns.icon ] =
+		treerow[treeview_devices_columns.icon] =
 			render_icon (Gtk::Stock::HARDDISK, Gtk::ICON_SIZE_LARGE_TOOLBAR);
-		treerow[ treeview_devices_columns.device ] = devices[ i ].get_path();
-		treerow[ treeview_devices_columns.size ] = "(" + Utils::format_size (devices[ i ].length, devices[ i ].sector_size) + ")";
+		treerow[treeview_devices_columns.device] = devices[i].get_path();
+		treerow[treeview_devices_columns.size] = "(" + Utils::format_size (devices[i].length, devices[i].sector_size) + ")";
 
 		//devices submenu....
 		hbox = manage (new Gtk::HBox());
-		hbox->pack_start (* Utils::mk_label (devices[ i ].get_path()), Gtk::PACK_SHRINK);
-		hbox->pack_start (* Utils::mk_label (" (" + Utils::format_size (devices[ i ].length, devices[ i ].sector_size) + ")",
+		hbox->pack_start (* Utils::mk_label (devices[i].get_path()), Gtk::PACK_SHRINK);
+		hbox->pack_start (* Utils::mk_label (" (" + Utils::format_size (devices[i].length, devices[i].sector_size) + ")",
 					              true,
 						      Gtk::ALIGN_RIGHT),
 				   Gtk::PACK_EXPAND_WIDGET);
@@ -580,12 +580,12 @@ void Win_GParted::refresh_combo_devices()
 			sigc::bind<unsigned int> (sigc::mem_fun(*this, &Win_GParted::radio_devices_changed), i));
 	}
 
-	menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].remove_submenu();
+	menubar_main.items()[0].get_submenu()->items()[1].remove_submenu();
 
 	if (menu->items().size())
 	{
 		menu->show_all();
-		menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].set_submenu (*menu);
+		menubar_main.items()[0].get_submenu()->items()[1].set_submenu (*menu);
 	}
 
 	combo_devices.set_active (current_device);
@@ -642,24 +642,24 @@ void Win_GParted::Fill_Label_Device_Info (bool clear)
 {
 	if (clear)
 		for (unsigned int t = 0; t < device_info.size(); t++)
-			device_info[ t ]->set_text ("");
+			device_info[t]->set_text ("");
 
 	else
 	{
 		short t = 0;
 
 		//global info...
-		device_info[ t++ ]->set_text (devices[ current_device ].model);
-		device_info[ t++ ]->set_text (Utils::format_size (devices[ current_device ].length, devices[ current_device ].sector_size));
-		device_info[ t++ ]->set_text (Glib::build_path ("\n", devices[ current_device ].get_paths()));
+		device_info[t++]->set_text (devices[current_device].model);
+		device_info[t++]->set_text (Utils::format_size (devices[current_device].length, devices[current_device].sector_size));
+		device_info[t++]->set_text (Glib::build_path ("\n", devices[current_device].get_paths()));
 
 		//detailed info
-		device_info[ t++ ]->set_text (devices[ current_device ].disktype);
-		device_info[ t++ ]->set_text (Utils::num_to_str (devices[ current_device ].heads));
-		device_info[ t++ ]->set_text (Utils::num_to_str (devices[ current_device ].sectors));
-		device_info[ t++ ]->set_text (Utils::num_to_str (devices[ current_device ].cylinders));
-		device_info[ t++ ]->set_text (Utils::num_to_str (devices[ current_device ].length));
-		device_info[ t++ ]->set_text (Utils::num_to_str (devices[ current_device ].sector_size));
+		device_info[t++]->set_text (devices[current_device].disktype);
+		device_info[t++]->set_text (Utils::num_to_str (devices[current_device].heads));
+		device_info[t++]->set_text (Utils::num_to_str (devices[current_device].sectors));
+		device_info[t++]->set_text (Utils::num_to_str (devices[current_device].cylinders));
+		device_info[t++]->set_text (Utils::num_to_str (devices[current_device].length));
+		device_info[t++]->set_text (Utils::num_to_str (devices[current_device].sector_size));
 	}
 }
 
@@ -735,13 +735,13 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 		return false;
 
 	// Two resize operations of the same partition
-	if (operations[ first ]->type == OPERATION_RESIZE_MOVE &&
-	     operations[ second ]->type == OPERATION_RESIZE_MOVE &&
-	     operations[ first ]->partition_new == operations[ second ]->partition_original
+	if (operations[first]->type == OPERATION_RESIZE_MOVE &&
+	     operations[second]->type == OPERATION_RESIZE_MOVE &&
+	     operations[first]->partition_new == operations[second]->partition_original
 	  )
 	{
-		operations[ first ]->partition_new = operations[ second ]->partition_new;
-		operations[ first ]->create_description();
+		operations[first]->partition_new = operations[second]->partition_new;
+		operations[first]->create_description();
 		remove_operation (second);
 
 		Refresh_Visual();
@@ -749,13 +749,13 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 		return true;
 	}
 	// Two label change operations on the same partition
-	else if (operations[ first ]->type == OPERATION_LABEL_PARTITION &&
-	          operations[ second ]->type == OPERATION_LABEL_PARTITION &&
-	          operations[ first ]->partition_new == operations[ second ]->partition_original
+	else if (operations[first]->type == OPERATION_LABEL_PARTITION &&
+	          operations[second]->type == OPERATION_LABEL_PARTITION &&
+	          operations[first]->partition_new == operations[second]->partition_original
 	       )
 	{
-		operations[ first ]->partition_new.label = operations[ second ]->partition_new.label;
-		operations[ first ]->create_description();
+		operations[first]->partition_new.label = operations[second]->partition_new.label;
+		operations[first]->create_description();
 		remove_operation (second);
 
 		Refresh_Visual();
@@ -763,16 +763,16 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 		return true;
 	}
 	// Two change-uuid change operations on the same partition
-	else if (operations[ first ]->type == OPERATION_CHANGE_UUID &&
-	          operations[ second ]->type == OPERATION_CHANGE_UUID &&
-	          operations[ first ]->partition_new == operations[ second ]->partition_original
+	else if (operations[first]->type == OPERATION_CHANGE_UUID &&
+	          operations[second]->type == OPERATION_CHANGE_UUID &&
+	          operations[first]->partition_new == operations[second]->partition_original
 	       )
 	{
 		// Changing half the UUID should not override changing all of it
-		if (operations[ first ]->partition_new.uuid == UUID_RANDOM_NTFS_HALF ||
-		     operations[ second ]->partition_new.uuid == UUID_RANDOM)
-			operations[ first ]->partition_new.uuid = operations[ second ]->partition_new.uuid;
-		operations[ first ]->create_description();
+		if (operations[first]->partition_new.uuid == UUID_RANDOM_NTFS_HALF ||
+		     operations[second]->partition_new.uuid == UUID_RANDOM)
+			operations[first]->partition_new.uuid = operations[second]->partition_new.uuid;
+		operations[first]->create_description();
 		remove_operation (second);
 
 		Refresh_Visual();
@@ -780,9 +780,9 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 		return true;
 	}
 	// Two check operations of the same partition
-	else if (operations[ first ]->type == OPERATION_CHECK &&
-	          operations[ second ]->type == OPERATION_CHECK &&
-	          operations[ first ]->partition_original == operations[ second ]->partition_original
+	else if (operations[first]->type == OPERATION_CHECK &&
+	          operations[second]->type == OPERATION_CHECK &&
+	          operations[first]->partition_original == operations[second]->partition_original
 	       )
 	{
 		remove_operation (second);
@@ -792,13 +792,13 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
 		return true;
 	}
 	// Two format operations of the same partition
-	else if (operations[ first ]->type == OPERATION_FORMAT &&
-	          operations[ second ]->type == OPERATION_FORMAT &&
-	          operations[ first ]->partition_new == operations[ second ]->partition_original
+	else if (operations[first]->type == OPERATION_FORMAT &&
+	          operations[second]->type == OPERATION_FORMAT &&
+	          operations[first]->partition_new == operations[second]->partition_original
 	       )
 	{
-		operations[ first ]->partition_new = operations[ second ]->partition_new;
-		operations[ first ]->create_description();
+		operations[first]->partition_new = operations[second]->partition_new;
+		operations[first]->create_description();
 		remove_operation (second);
 
 		Refresh_Visual();
@@ -814,12 +814,12 @@ bool Win_GParted::Merge_Operations (unsigned int first, unsigned int second)
  */
 void Win_GParted::Refresh_Visual()
 {
-	std::vector<Partition> partitions = devices[ current_device ].partitions;
+	std::vector<Partition> partitions = devices[current_device].partitions;
 
 	//make all operations visible
 	for (unsigned int t = 0; t < operations.size(); t++)
-		if (operations[ t ]->device == devices[ current_device ])
-			operations[ t ]->apply_to_visual (partitions);
+		if (operations[t]->device == devices[current_device])
+			operations[t]->apply_to_visual (partitions);
 
 	hbox_operations.load_operations (operations);
 
@@ -840,10 +840,10 @@ void Win_GParted::Refresh_Visual()
 	primary_count = 0;
 	for (unsigned int t = 0; t < partitions.size(); t++)
 	{
-		if (partitions[ t ].get_path() == copied_partition.get_path())
-			copied_partition = partitions[ t ];
+		if (partitions[t].get_path() == copied_partition.get_path())
+			copied_partition = partitions[t];
 
-		switch (partitions[ t ].type)
+		switch (partitions[t].type)
 		{
 			case TYPE_PRIMARY	:
 				primary_count++;
@@ -860,7 +860,7 @@ void Win_GParted::Refresh_Visual()
 	}
 
 	//frame visualdisk
-	drawingarea_visualdisk.load_partitions (partitions, devices[ current_device ].length);
+	drawingarea_visualdisk.load_partitions (partitions, devices[current_device].length);
 
 	//treeview details
 	treeview_detail.load_partitions (partitions);
@@ -914,11 +914,11 @@ void Win_GParted::set_valid_operations()
 	allow_manage_flags (false); allow_check (false); allow_label_partition (false);
 	allow_change_uuid (false); allow_info (false);
 
-	dynamic_cast<Gtk::Label*> (menu_partition.items()[ MENU_TOGGLE_MOUNT_SWAP ].get_child())
+	dynamic_cast<Gtk::Label*> (menu_partition.items()[MENU_TOGGLE_MOUNT_SWAP].get_child())
 		->set_label (FileSystem::get_generic_text (CTEXT_DEACTIVATE_FILESYSTEM));
 
-	menu_partition.items()[ MENU_TOGGLE_MOUNT_SWAP ].show();
-	menu_partition.items()[ MENU_MOUNT ].hide();
+	menu_partition.items()[MENU_TOGGLE_MOUNT_SWAP].show();
+	menu_partition.items()[MENU_MOUNT].hide();
 
 	//no partition selected...
 	if (! selected_partition.get_paths().size())
@@ -933,7 +933,7 @@ void Win_GParted::set_valid_operations()
 
 	//Activate / deactivate
 	if (gparted_core.get_filesystem_object (selected_partition.filesystem))
-		dynamic_cast<Gtk::Label*> (menu_partition.items()[ MENU_TOGGLE_MOUNT_SWAP ].get_child())
+		dynamic_cast<Gtk::Label*> (menu_partition.items()[MENU_TOGGLE_MOUNT_SWAP].get_child())
 			->set_label (gparted_core.get_filesystem_object (selected_partition.filesystem)
 			->get_custom_text ( selected_partition.busy
 			                                ? CTEXT_DEACTIVATE_FILESYSTEM
@@ -941,7 +941,7 @@ void Win_GParted::set_valid_operations()
 			                              )
 			          );
 	else
-		dynamic_cast<Gtk::Label*> (menu_partition.items()[ MENU_TOGGLE_MOUNT_SWAP ].get_child())
+		dynamic_cast<Gtk::Label*> (menu_partition.items()[MENU_TOGGLE_MOUNT_SWAP].get_child())
 			->set_label (FileSystem::get_generic_text ( selected_partition.busy
 			                                           ? CTEXT_DEACTIVATE_FILESYSTEM
 			                                           : CTEXT_ACTIVATE_FILESYSTEM)
@@ -968,7 +968,7 @@ void Win_GParted::set_valid_operations()
 		allow_new (true);
 
 		//find out if there is a copied partition and if it fits inside this unallocated space
-		if (! copied_partition.get_path().empty() && ! devices[ current_device ].readonly)
+		if (! copied_partition.get_path().empty() && ! devices[current_device].readonly)
 		{
 			Byte_Value required_size;
 			if (copied_partition.filesystem == FS_XFS)
@@ -998,17 +998,17 @@ void Win_GParted::set_valid_operations()
 			        || (selected_partition.type == TYPE_LOGICAL)
 			      )
 			    && (selected_partition.sector_end
-			         < (devices[ current_device ].length
-			             - (2 * MEBIBYTE / devices[ current_device ].sector_size)
+			         < (devices[current_device].length
+			             - (2 * MEBIBYTE / devices[current_device].sector_size)
 			          )
 			      )
 			  )
 				required_size += MEBIBYTE;
 
 			//Determine if space is needed for the backup partition on a GPT partition table
-			if ( (devices[ current_device ].disktype == "gpt")
-			    && ((devices[ current_device ].length - selected_partition.sector_end)
-			         < (MEBIBYTE / devices[ current_device ].sector_size)
+			if ( (devices[current_device].disktype == "gpt")
+			    && ((devices[current_device].length - selected_partition.sector_end)
+			         < (MEBIBYTE / devices[current_device].sector_size)
 			      )
 			  )
 				required_size += MEBIBYTE;
@@ -1028,7 +1028,7 @@ void Win_GParted::set_valid_operations()
 		     selected_partition.logicals.back().type == TYPE_UNALLOCATED)
 			allow_delete (true);
 
-		if (! devices[ current_device ].readonly)
+		if (! devices[current_device].readonly)
 			allow_resize (true);
 
 		return;
@@ -1043,7 +1043,7 @@ void Win_GParted::set_valid_operations()
 		allow_format (true);
 
 		//find out if resizing/moving is possible
-		if ((fs.grow || fs.shrink || fs.move) && ! devices[ current_device ].readonly)
+		if ((fs.grow || fs.shrink || fs.move) && ! devices[current_device].readonly)
 			allow_resize (true);
 
 		//only allow copying of real partitions
@@ -1064,20 +1064,20 @@ void Win_GParted::set_valid_operations()
 		    && selected_partition.get_mountpoints().size()
 		  )
 		{
-			menu = menu_partition.items()[ MENU_MOUNT ].get_submenu();
+			menu = menu_partition.items()[MENU_MOUNT].get_submenu();
 			menu->items().clear();
 			for (unsigned int t = 0; t < selected_partition.get_mountpoints().size(); t++)
 			{
 				menu->items().push_back(
 					Gtk::Menu_Helpers::MenuElem(
-						selected_partition.get_mountpoints()[ t ],
+						selected_partition.get_mountpoints()[t],
 						sigc::bind<unsigned int> (sigc::mem_fun(*this, &Win_GParted::activate_mount_partition), t)));
 
 				dynamic_cast<Gtk::Label*> (menu->items().back().get_child())->set_use_underline (false);
 			}
 
-			menu_partition.items()[ MENU_TOGGLE_MOUNT_SWAP ].hide();
-			menu_partition.items()[ MENU_MOUNT ].show();
+			menu_partition.items()[MENU_TOGGLE_MOUNT_SWAP].hide();
+			menu_partition.items()[MENU_MOUNT].show();
 		}
 
 		//see if there is an copied partition and if it passes all tests
@@ -1110,7 +1110,7 @@ void Win_GParted::open_operationslist()
 				Gtk::Main::iteration();
 		}
 
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 2 ].get_submenu()->items()[ 1 ])
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[2].get_submenu()->items()[1])
 			->set_active (true);
 	}
 }
@@ -1134,7 +1134,7 @@ void Win_GParted::close_operationslist()
 
 		hbox_operations.hide();
 
-		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 2 ].get_submenu()->items()[ 1 ])
+		static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[2].get_submenu()->items()[1])
 			->set_active (false);
 	}
 }
@@ -1162,7 +1162,7 @@ void Win_GParted::combo_devices_changed()
 		current_device = old_current_device;
 	if (current_device >= devices.size())
 		current_device = 0;
-	set_title (String::ucompose ("%1 - GParted", devices[ current_device ].get_path()));
+	set_title (String::ucompose ("%1 - GParted", devices[current_device].get_path()));
 
 	//refresh label_device_info
 	Fill_Label_Device_Info();
@@ -1171,10 +1171,10 @@ void Win_GParted::combo_devices_changed()
 	Refresh_Visual();
 
 	//uodate radiobuttons..
-	if (menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].get_submenu())
+	if (menubar_main.items()[0].get_submenu()->items()[1].get_submenu())
 		static_cast<Gtk::RadioMenuItem *>(
-			& menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].get_submenu()->
-			items()[ current_device ])->set_active (true);
+			& menubar_main.items()[0].get_submenu()->items()[1].get_submenu()->
+			items()[current_device])->set_active (true);
 }
 
 /**
@@ -1183,8 +1183,8 @@ void Win_GParted::combo_devices_changed()
 void Win_GParted::radio_devices_changed (unsigned int item)
 {
 	if (static_cast<Gtk::RadioMenuItem *>(
-		& menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].get_submenu()->
-		items()[ item ])->get_active())
+		& menubar_main.items()[0].get_submenu()->items()[1].get_submenu()->
+		items()[item])->get_active())
 	{
 		combo_devices.set_active (item);
 	}
@@ -1233,7 +1233,7 @@ void Win_GParted::menu_gparted_refresh_devices()
 	unsigned int i;
 	for (unsigned int t = 0; t < operations.size(); t++)
 	{
-		for (i = 0; i < devices.size() && devices[ i ] != operations[ t ]->device; i++) {}
+		for (i = 0; i < devices.size() && devices[i] != operations[t]->device; i++) {}
 
 		if (i >= devices.size())
 			remove_operation (t--);
@@ -1245,11 +1245,11 @@ void Win_GParted::menu_gparted_refresh_devices()
 		this->set_title ("GParted");
 		combo_devices.hide();
 
-		menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].set_sensitive (false);
-		menubar_main.items()[ 1 ].set_sensitive (false);
-		menubar_main.items()[ 2 ].set_sensitive (false);
-		menubar_main.items()[ 3 ].set_sensitive (false);
-		menubar_main.items()[ 4 ].set_sensitive (false);
+		menubar_main.items()[0].get_submenu()->items()[1].set_sensitive (false);
+		menubar_main.items()[1].set_sensitive (false);
+		menubar_main.items()[2].set_sensitive (false);
+		menubar_main.items()[3].set_sensitive (false);
+		menubar_main.items()[4].set_sensitive (false);
 		toolbar_main.set_sensitive (false);
 		drawingarea_visualdisk.set_sensitive (false);
 		treeview_detail.set_sensitive (false);
@@ -1271,11 +1271,11 @@ void Win_GParted::menu_gparted_refresh_devices()
 	{
 		combo_devices.show();
 
-		menubar_main.items()[ 0 ].get_submenu()->items()[ 1 ].set_sensitive (true);
-		menubar_main.items()[ 1 ].set_sensitive (true);
-		menubar_main.items()[ 2 ].set_sensitive (true);
-		menubar_main.items()[ 3 ].set_sensitive (true);
-		menubar_main.items()[ 4 ].set_sensitive (true);
+		menubar_main.items()[0].get_submenu()->items()[1].set_sensitive (true);
+		menubar_main.items()[1].set_sensitive (true);
+		menubar_main.items()[2].set_sensitive (true);
+		menubar_main.items()[3].set_sensitive (true);
+		menubar_main.items()[4].set_sensitive (true);
 
 		toolbar_main.set_sensitive (true);
 		drawingarea_visualdisk.set_sensitive (true);
@@ -1313,7 +1313,7 @@ void Win_GParted::menu_view_harddisk_info()
  */
 void Win_GParted::menu_view_operations()
 {
-	if (static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[ 2 ].get_submenu()->items()[ 1 ])->get_active())
+	if (static_cast<Gtk::CheckMenuItem *> (& menubar_main.items()[2].get_submenu()->items()[1])->get_active())
 		open_operationslist();
 	else
 		close_operationslist();
@@ -1465,7 +1465,7 @@ void Win_GParted::thread_toggle_swap (bool * success, Glib::ustring * error)
 void Win_GParted::thread_guess_partition_table()
 {
 	this->gpart_output="";
-	this->gparted_core.guess_partition_table(devices[ current_device ], this->gpart_output);
+	this->gparted_core.guess_partition_table(devices[current_device], this->gpart_output);
 	pulse=false;
 }
 
@@ -1540,7 +1540,7 @@ void Win_GParted::remove_operation (int index, bool remove_all)
 	if (remove_all)
 	{
 		for (unsigned int t = 0; t < operations.size(); t++)
-			delete operations[ t ];
+			delete operations[t];
 
 		operations.clear();
 	}
@@ -1551,7 +1551,7 @@ void Win_GParted::remove_operation (int index, bool remove_all)
 	}
 	else if (index > -1 && index < static_cast<int> (operations.size()))
 	{
-		delete operations[ index ];
+		delete operations[index];
 		operations.erase (operations.begin() + index);
 	}
 }
@@ -1565,7 +1565,7 @@ int Win_GParted::partition_in_operation_queue_count (const Partition & partition
 
 	for (unsigned int t = 0; t < operations.size(); t++)
 	{
-		if (partition.get_path() == operations[ t ]->partition_original.get_path())
+		if (partition.get_path() == operations[t]->partition_original.get_path())
 			operation_count++;
 	}
 
@@ -1585,21 +1585,21 @@ int  Win_GParted::active_partitions_on_device_count (const Device & device)
 		//FIXME:  Should also count other types of active partitions, such as LVM2 when we know how.
 
 		//Count the active primary partitions
-		if (  device.partitions[ k ].busy
-		    && device.partitions[ k ].type != TYPE_EXTENDED
-		    && device.partitions[ k ].type != TYPE_UNALLOCATED
+		if (  device.partitions[k].busy
+		    && device.partitions[k].type != TYPE_EXTENDED
+		    && device.partitions[k].type != TYPE_UNALLOCATED
 		  )
 			active_count++;
 
 		//Count the active logical partitions
-		if (  device.partitions[ k ].busy
-		    && device.partitions[ k ].type == TYPE_EXTENDED
+		if (  device.partitions[k].busy
+		    && device.partitions[k].type == TYPE_EXTENDED
 		  )
 		{
-			for (unsigned int j=0; j < device.partitions[ k ].logicals.size(); j++)
+			for (unsigned int j=0; j < device.partitions[k].logicals.size(); j++)
 			{
-				if (  device.partitions[ k ].logicals [ j ].busy
-				    && device.partitions[ k ].logicals [ j ].type != TYPE_UNALLOCATED
+				if (  device.partitions[k].logicals [j].busy
+				    && device.partitions[k].logicals [j].type != TYPE_UNALLOCATED
 				  )
 					active_count++;
 			}
