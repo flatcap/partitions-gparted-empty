@@ -63,10 +63,20 @@ private:
 
 		treeview_detail_Columns()
 		{
-			add (path); add (filesystem); add (mountpoint); add (label);
-			add (size); add (used); add (unused); add (color);
-			add (text_color); add (mount_text_color); add (icon1);
-			add (icon2); add (flags); add (partition);
+			add (path);
+			add (filesystem);
+			add (mountpoint);
+			add (label);
+			add (size);
+			add (used);
+			add (unused);
+			add (color);
+			add (text_color);
+			add (mount_text_color);
+			add (icon1);
+			add (icon2);
+			add (flags);
+			add (partition);
 		}
 	};
 

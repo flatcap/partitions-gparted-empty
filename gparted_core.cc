@@ -622,11 +622,6 @@ void GParted_Core::init_maps()
 	mount_info.clear();
 	fstab_info.clear();
 
-	read_mountpoints_from_file ("/proc/mounts", mount_info);
-	read_mountpoints_from_file_swaps ("/proc/swaps", mount_info);
-	read_mountpoints_from_file ("/etc/mtab", mount_info);
-	read_mountpoints_from_file ("/etc/fstab", fstab_info);
-
 	//sort the mount points and remove duplicates.. (no need to do this for fstab_info)
 	for (iter_mp = mount_info.begin(); iter_mp != mount_info.end(); ++iter_mp)
 	{
@@ -1710,11 +1705,7 @@ void GParted_Core::close_device_and_disk()
  */
 bool GParted_Core::commit()
 {
-	bool success = ped_disk_commit_to_dev (lp_disk);
-
-	success = commit_to_os (10) && success;
-
-	return success;
+	return true;
 }
 
 /**
@@ -1722,12 +1713,7 @@ bool GParted_Core::commit()
  */
 bool GParted_Core::commit_to_os (std::time_t timeout)
 {
-	bool success;
-		success = ped_disk_commit_to_os (lp_disk);
-
-	settle_device (timeout);
-
-	return success;
+	return true;
 }
 
 /**
