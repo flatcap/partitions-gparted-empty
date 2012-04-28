@@ -14,14 +14,14 @@ TreeView_Detail::TreeView_Detail()
 	treeselection->signal_changed().connect (sigc::mem_fun (*this, &TreeView_Detail::on_selection_changed));
 
 	//append columns
-	append_column ("Partition", treeview_detail_columns.path);
+	append_column ("Partition",   treeview_detail_columns.path);
 	append_column ("File System", treeview_detail_columns.color);
 	append_column ("Mount Point", treeview_detail_columns.mountpoint);
-	append_column ("Label", treeview_detail_columns.label);
-	append_column ("Size", treeview_detail_columns.size);
-	append_column ("Used", treeview_detail_columns.used);
-	append_column ("Unused", treeview_detail_columns.unused);
-	append_column ("Flags", treeview_detail_columns.flags);
+	append_column ("Label",       treeview_detail_columns.label);
+	append_column ("Size",        treeview_detail_columns.size);
+	append_column ("Used",        treeview_detail_columns.used);
+	append_column ("Unused",      treeview_detail_columns.unused);
+	append_column ("Flags",       treeview_detail_columns.flags);
 
 	//icons
 	get_column (0)->pack_start (treeview_detail_columns.icon2, false);
@@ -29,10 +29,8 @@ TreeView_Detail::TreeView_Detail()
 
 	//PARTITION
 	//colored text in Partition column
-	Gtk::CellRendererText *cell_renderer_text =
-		dynamic_cast<Gtk::CellRendererText*> (get_column (0)->get_first_cell_renderer());
-	get_column (0)->add_attribute (cell_renderer_text->property_foreground(),
-					 treeview_detail_columns.text_color);
+	Gtk::CellRendererText *cell_renderer_text = dynamic_cast<Gtk::CellRendererText*> (get_column (0)->get_first_cell_renderer());
+	get_column (0)->add_attribute (cell_renderer_text->property_foreground(), treeview_detail_columns.text_color);
 
 	//FILE SYSTEM
 	//file system text
@@ -41,8 +39,7 @@ TreeView_Detail::TreeView_Detail()
 	//colored text in File System column
 	std::vector<Gtk::CellRenderer*> renderers = get_column (1)->get_cell_renderers();
 	cell_renderer_text = dynamic_cast<Gtk::CellRendererText*> (renderers.back());
-	get_column (1)->add_attribute (cell_renderer_text->property_foreground(),
-					 treeview_detail_columns.text_color);
+	get_column (1)->add_attribute (cell_renderer_text->property_foreground(), treeview_detail_columns.text_color);
 
 	//pixbuf and text are both left aligned
 	get_column (1)->get_first_cell_renderer()->property_xalign() = Gtk::ALIGN_LEFT;
@@ -51,8 +48,7 @@ TreeView_Detail::TreeView_Detail()
 	//MOUNT POINT
 	//colored text in mount point column
 	cell_renderer_text = dynamic_cast<Gtk::CellRendererText*> (get_column (2)->get_first_cell_renderer());
-	get_column (2)->add_attribute (cell_renderer_text->property_foreground(),
-					 treeview_detail_columns.mount_text_color);
+	get_column (2)->add_attribute (cell_renderer_text->property_foreground(), treeview_detail_columns.mount_text_color);
 
 	//set alignment of numeric columns to right
 	for (short t = 4; t < 7; t++)
@@ -61,8 +57,8 @@ TreeView_Detail::TreeView_Detail()
 	//expand columns and centeralign the headertext
 	for (short t = 4; t < 8; t++)
 	{
-		get_column (t)->set_expand (true);
-		get_column (t)->set_alignment (0.5);
+		//get_column (t)->set_expand (true);
+		//get_column (t)->set_alignment (0.5);
 	}
 }
 
@@ -104,10 +100,7 @@ void TreeView_Detail::clear()
 /**
  * load_partitions
  */
-void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions,
-				       bool & mountpoints,
-				       bool & labels,
-				       const Gtk::TreeRow & parent_row)
+void TreeView_Detail::load_partitions (const std::vector<Partition> & partitions, bool & mountpoints, bool & labels, const Gtk::TreeRow & parent_row)
 {
 	Gtk::TreeRow row;
 	for (unsigned int i = 0; i < partitions.size(); i++)
@@ -155,17 +148,14 @@ bool TreeView_Detail::set_selected (Gtk::TreeModel::Children rows, const Partiti
 void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition & partition)
 {
 	if (partition.busy)
-		treerow[treeview_detail_columns.icon1] =
-			render_icon (Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_BUTTON);
+		treerow[treeview_detail_columns.icon1] = render_icon (Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_BUTTON);
 
 	if (partition.messages.size() > 0)
 	{
 		if (! static_cast< Glib::RefPtr<Gdk::Pixbuf> > (treerow[treeview_detail_columns.icon1]) )
-			treerow[treeview_detail_columns.icon1] =
-				render_icon (Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
+			treerow[treeview_detail_columns.icon1] = render_icon (Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
 		else
-			treerow[treeview_detail_columns.icon2] =
-				render_icon (Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
+			treerow[treeview_detail_columns.icon2] = render_icon (Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
 	}
 
 	treerow[treeview_detail_columns.path] = partition.get_path();
@@ -176,8 +166,7 @@ void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition 
 
 	treerow[treeview_detail_columns.color] = Utils::get_color_as_pixbuf (partition.filesystem, 16, 16);
 
-	treerow[treeview_detail_columns.filesystem] =
-		Utils::get_filesystem_string (partition.filesystem);
+	treerow[treeview_detail_columns.filesystem] = Utils::get_filesystem_string (partition.filesystem);
 
 	//mount point
 	treerow[treeview_detail_columns.mountpoint] = Glib::build_path (", ", partition.get_mountpoints());
@@ -189,16 +178,13 @@ void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition 
 	treerow[treeview_detail_columns.size] = Utils::format_size (partition.get_sector_length(), partition.sector_size);
 
 	//used
-	treerow[treeview_detail_columns.used] =
-		partition.sectors_used == -1 ? "---" : Utils::format_size (partition.sectors_used, partition.sector_size);
+	treerow[treeview_detail_columns.used] = partition.sectors_used == -1 ? "---" : Utils::format_size (partition.sectors_used, partition.sector_size);
 
 	//unused
-	treerow[treeview_detail_columns.unused] =
-		partition.sectors_unused == -1 ? "---" : Utils::format_size (partition.sectors_unused, partition.sector_size);
+	treerow[treeview_detail_columns.unused] = partition.sectors_unused == -1 ? "---" : Utils::format_size (partition.sectors_unused, partition.sector_size);
 
 	//flags
-	treerow[treeview_detail_columns.flags] =
-		Glib::build_path (", ", partition.flags);
+	treerow[treeview_detail_columns.flags] = Glib::build_path (", ", partition.flags);
 
 	//hidden column (partition object)
 	treerow[treeview_detail_columns.partition] = partition;
@@ -209,7 +195,7 @@ void TreeView_Detail::create_row (const Gtk::TreeRow & treerow, const Partition 
  */
 bool TreeView_Detail::on_button_press_event (GdkEventButton * event)
 {
-	//Call base class, to allow normal handling,
+	//Call base class, to allow normal handling
 	bool handled = Gtk::TreeView::on_button_press_event (event);
 
 	//right-click
@@ -224,7 +210,7 @@ bool TreeView_Detail::on_button_press_event (GdkEventButton * event)
  */
 void TreeView_Detail::on_row_activated (const Gtk::TreeModel::Path & path, Gtk::TreeViewColumn * column)
 {
-	//Call base class, to allow normal handling,
+	//Call base class, to allow normal handling
 	Gtk::TreeView::on_row_activated (path, column);
 
 	signal_partition_activated.emit();
